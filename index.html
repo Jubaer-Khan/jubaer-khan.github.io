@@ -24,6 +24,7 @@
     --faint:     oklch(0.635 0.015 250);
     --accent:    oklch(0.525 0.155 248);
     --accent-dim:oklch(0.525 0.155 248 / .10);
+    --accent-2:  oklch(0.500 0.200 300);
     --signal:    oklch(0.58 0.14 248 / .40);
 
     --radius: 12px;
@@ -43,6 +44,7 @@
       --faint:     oklch(0.575 0.018 258);
       --accent:    oklch(0.760 0.135 232);
       --accent-dim:oklch(0.760 0.135 232 / .14);
+      --accent-2:  oklch(0.760 0.150 305);
       --signal:    oklch(0.760 0.135 232 / .45);
     }
   }
@@ -56,6 +58,7 @@
     --faint:     oklch(0.575 0.018 258);
     --accent:    oklch(0.760 0.135 232);
     --accent-dim:oklch(0.760 0.135 232 / .14);
+    --accent-2:  oklch(0.760 0.150 305);
     --signal:    oklch(0.760 0.135 232 / .45);
   }
 
@@ -104,20 +107,26 @@
   }
 
   .sec-label{
-    font-size:clamp(26px, 5vw, 34px);
-    font-weight:700;
-    letter-spacing:-0.022em;
+    position:relative;
+    inline-size:fit-content;
+    font-size:clamp(34px, 7vw, 52px);
+    font-weight:800;
+    line-height:1.08;
+    letter-spacing:-0.035em;
+    padding-bottom:14px;
+    margin-bottom:32px;
     color:var(--accent);
-    margin-bottom:28px;
-    display:flex;
-    align-items:center;
-    gap:12px;
+    background:linear-gradient(100deg, var(--accent) 10%, var(--accent-2) 90%);
+    -webkit-background-clip:text;
+    background-clip:text;
+    -webkit-text-fill-color:transparent;
 
+    /* short gradient bar under the title */
     &::after{
       content:"";
-      flex:1;
-      height:1px;
-      background:linear-gradient(90deg, var(--line), transparent);
+      position:absolute; left:0; bottom:0;
+      inline-size:64px; block-size:4px; border-radius:2px;
+      background:linear-gradient(90deg, var(--accent), var(--accent-2));
     }
   }
 }
@@ -386,6 +395,45 @@
   }
   .card[hidden]{ display:none }
 
+  /* ---- tiles ---- */
+  .tile-icon{
+    inline-size:42px; block-size:42px; border-radius:11px;
+    display:grid; place-items:center; flex-shrink:0;
+    background:var(--accent-dim); color:var(--accent);
+    margin-bottom:14px;
+    transition:background .22s, color .22s;
+    & svg{
+      inline-size:22px; block-size:22px;
+      fill:none; stroke:currentColor; stroke-width:1.8; stroke-linecap:round; stroke-linejoin:round;
+    }
+  }
+  .card:hover .tile-icon{ background:var(--accent); color:var(--bg) }
+  .repo-top .tile-icon{ margin-bottom:6px }
+
+  .tile{
+    display:flex; flex-direction:column;
+    & .org{ font-size:14px; margin-bottom:8px }
+    & .when{ margin:0 0 10px; display:block; inline-size:auto }
+    & p:last-child{ margin-bottom:0 }
+  }
+  .tile-wide{
+    flex-direction:row; align-items:flex-start; gap:18px;
+    & .tile-icon{ margin-bottom:0 }
+    & .tile-body{ flex:1 }
+    & h3{ font-size:17.5px }
+    & .when{ margin:4px 0 0 auto }
+    @media (width < 640px){
+      flex-direction:column; gap:0;
+      & .tile-icon{ margin-bottom:14px }
+      & .when{ margin:10px 0 0 }
+    }
+  }
+  .pill{
+    display:inline-block; font-size:12.5px; font-weight:600;
+    padding:3px 11px; border-radius:999px;
+    background:var(--accent-dim); color:var(--accent);
+  }
+
   @container (min-width: 330px){
     .card h3{ font-size:16.5px }
   }
@@ -605,6 +653,7 @@
     <div class="grid" id="grid">
 
       <article class="card reveal" data-cat="ai embedded">
+        <span class="tile-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="8" width="18" height="12" rx="2"/><path d="M12 8V4H8M2 14h2M20 14h2M15 13v2M9 13v2"/></svg></span>
         <h3>Agentic SDLC &amp; AI Agent-Based Monitoring</h3>
         <span class="when">Jul — Aug 2026</span>
         <p>Two in-house R&amp;D initiatives: applying AI agents across the software development life cycle (requirements, design, coding, testing and review), and AI-agent-based monitoring software.</p>
@@ -612,6 +661,7 @@
       </article>
 
       <article class="card reveal" data-cat="web desktop">
+        <span class="tile-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 12a9 9 0 0 1 15-6.7L21 8M21 3v5h-5M21 12a9 9 0 0 1-15 6.7L3 16M3 21v-5h5"/></svg></span>
         <h3>Legacy Modernisation — VB6 to C#/.NET</h3>
         <span class="when">Nov 2025 — Present</span>
         <p>Migration of a legacy VB6 management application to a web-based C#/.NET system, including analysis of existing functionality and re-implementation.</p>
@@ -619,6 +669,7 @@
       </article>
 
       <article class="card reveal" data-cat="embedded automotive">
+        <span class="tile-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 17h2c.6 0 1-.4 1-1v-3c0-.9-.7-1.7-1.5-1.9L18 10l-2.7-3.6A2 2 0 0 0 13.7 6H7.3a2 2 0 0 0-1.6.8L3 10.5V16c0 .6.4 1 1 1h1M9 17h6"/><circle cx="7" cy="17" r="2"/><circle cx="17" cy="17" r="2"/></svg></span>
         <h3>Automotive Embedded Control Platform — 2nd gen</h3>
         <span class="when">Feb — Nov 2025</span>
         <p>Safety-critical embedded modules for automotive-grade vehicle systems, from analysis and detailed design through production and test.</p>
@@ -626,6 +677,7 @@
       </article>
 
       <article class="card reveal" data-cat="embedded desktop">
+        <span class="tile-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 3h6M10 3v6L4.5 18.5A2 2 0 0 0 6.2 21.5h11.6a2 2 0 0 0 1.7-3L14 9V3M7 15h10"/></svg></span>
         <h3>Internal R&amp;D &amp; Engineering Support Platforms</h3>
         <span class="when">Nov 2023 — Present</span>
         <p>Internal tools, proofs of concept and training platforms supporting on-the-job training and experimental work across embedded and desktop stacks.</p>
@@ -633,6 +685,7 @@
       </article>
 
       <article class="card reveal" data-cat="embedded">
+        <span class="tile-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m4 17 6-6-6-6M12 19h8"/></svg></span>
         <h3>Custom Embedded Linux Distribution</h3>
         <span class="when">Nov 2023 — Mar 2024</span>
         <p>Built and customised Embedded Linux images for specific target hardware — layer configuration, package selection and image tuning.</p>
@@ -640,6 +693,7 @@
       </article>
 
       <article class="card reveal" data-cat="desktop">
+        <span class="tile-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></svg></span>
         <h3>Cross-Platform Desktop Application</h3>
         <span class="when">Sep — Oct 2023</span>
         <p>High-performance cross-platform GUI application, covering requirement analysis, detailed design and implementation.</p>
@@ -647,6 +701,7 @@
       </article>
 
       <article class="card reveal" data-cat="web">
+        <span class="tile-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15 15 0 0 1 0 20 15 15 0 0 1 0-20"/></svg></span>
         <h3>Enterprise Asset Management Web Application</h3>
         <span class="when">Mar — May 2023</span>
         <p>Web-based asset management features with role-based access control, from investigation and basic design through detailed design.</p>
@@ -654,6 +709,7 @@
       </article>
 
       <article class="card reveal" data-cat="embedded automotive">
+        <span class="tile-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 17h2c.6 0 1-.4 1-1v-3c0-.9-.7-1.7-1.5-1.9L18 10l-2.7-3.6A2 2 0 0 0 13.7 6H7.3a2 2 0 0 0-1.6.8L3 10.5V16c0 .6.4 1 1 1h1M9 17h6"/><circle cx="7" cy="17" r="2"/><circle cx="17" cy="17" r="2"/></svg></span>
         <h3>Automotive Embedded Control Platform — 1st gen</h3>
         <span class="when">Jun 2022 — Feb 2023</span>
         <p>Vehicle interface management software for an automotive client, covering analysis, detailed design, production and test under embedded coding standards.</p>
@@ -672,6 +728,7 @@
 
       <article class="card repo reveal">
         <div class="repo-top">
+          <span class="tile-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/></svg></span>
           <span class="lang"><span class="dot-lang"></span>Python</span>
         </div>
         <h3><a href="https://github.com/Jubaer-Khan/Retinal-Image-Segmentation-using-CNN" target="_blank" rel="noopener">Retinal Image Segmentation using CNN</a></h3>
@@ -682,6 +739,7 @@
 
       <article class="card repo reveal">
         <div class="repo-top">
+          <span class="tile-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="2" width="14" height="20" rx="2"/><path d="M12 18h.01"/></svg></span>
           <span class="lang"><span class="dot-lang"></span>HTML</span>
         </div>
         <h3><a href="https://github.com/Jubaer-Khan/MenuWhiz--NFC-based-Restaurant-order-application" target="_blank" rel="noopener">MenuWhiz — NFC Restaurant Ordering</a></h3>
@@ -734,22 +792,45 @@
   </div>
 </section>
 
-<section id="background">
+<section id="education">
   <div class="wrap">
-    <h2 class="sec-label reveal">Education &amp; Certifications</h2>
+    <h2 class="sec-label reveal">Education</h2>
 
-    <div class="item reveal">
-      <div class="item-head"><h3>B.Sc. in Computer Science &amp; Engineering</h3><span class="when">2017 — 2021</span></div>
-      <p class="org">North South University, Dhaka · Cum Laude</p>
-    </div>
+    <article class="card tile tile-wide reveal">
+      <span class="tile-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M22 10 12 5 2 10l10 5 10-5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg></span>
+      <div class="tile-body">
+        <h3>B.Sc. in Computer Science &amp; Engineering</h3>
+        <p class="org">North South University, Dhaka</p>
+        <span class="pill">Cum Laude</span>
+      </div>
+      <span class="when">2017 — 2021</span>
+    </article>
+  </div>
+</section>
 
-    <div class="item reveal">
-      <div class="item-head"><h3>Certifications</h3></div>
-      <ul class="bul">
-        <li>Artificial Intelligence Fundamentals — IBM SkillsBuild, 2026</li>
-        <li>Information Security (IS-101) — BJIT Academy, 2024</li>
-        <li>Fundamental Engineering Course in Embedded System — BJIT Academy, 2022</li>
-      </ul>
+<section id="certifications">
+  <div class="wrap">
+    <h2 class="sec-label reveal">Certifications</h2>
+
+    <div class="grid">
+      <article class="card tile reveal">
+        <span class="tile-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3l1.9 5.8L20 11l-6.1 2.2L12 19l-1.9-5.8L4 11l6.1-2.2z"/></svg></span>
+        <h3>Artificial Intelligence Fundamentals</h3>
+        <p class="org">IBM SkillsBuild</p>
+        <span class="when">2026</span>
+      </article>
+      <article class="card tile reveal">
+        <span class="tile-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="m9 12 2 2 4-4"/></svg></span>
+        <h3>Information Security (IS-101)</h3>
+        <p class="org">BJIT Academy</p>
+        <span class="when">2024</span>
+      </article>
+      <article class="card tile reveal">
+        <span class="tile-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="5" width="14" height="14" rx="2"/><rect x="9" y="9" width="6" height="6"/><path d="M9 1v4M15 1v4M9 19v4M15 19v4M1 9h4M1 15h4M19 9h4M19 15h4"/></svg></span>
+        <h3>Fundamental Engineering Course in Embedded System</h3>
+        <p class="org">BJIT Academy</p>
+        <span class="when">2022</span>
+      </article>
     </div>
   </div>
 </section>
@@ -758,10 +839,14 @@
   <div class="wrap">
     <h2 class="sec-label reveal">Awards</h2>
 
-    <div class="item reveal">
-      <div class="item-head"><h3>Best Performer of the Year</h3><span class="when">2023 — 2024</span></div>
-      <p class="org">BJIT Ltd.</p>
-      <p>Company-wide annual recognition, presented at the BJIT General Meeting 2023–2024.</p>
+    <div class="grid">
+      <article class="card tile reveal">
+        <span class="tile-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 21h8M12 17v4M7 4h10v5a5 5 0 0 1-10 0zM17 5h3v2a3 3 0 0 1-3 3M7 5H4v2a3 3 0 0 0 3 3"/></svg></span>
+        <h3>Best Performer of the Year</h3>
+        <p class="org">BJIT Ltd.</p>
+        <span class="when">2023 — 2024</span>
+        <p>Company-wide annual recognition, presented at the BJIT General Meeting 2023–2024.</p>
+      </article>
     </div>
   </div>
 </section>
