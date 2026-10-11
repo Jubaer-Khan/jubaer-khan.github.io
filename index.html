@@ -192,9 +192,14 @@
     display:inline-flex; align-items:center; gap:8px;
   }
   .pulse{
+    position:relative;
     inline-size:7px; block-size:7px; border-radius:50%;
     background:var(--accent);
-    box-shadow:0 0 0 0 var(--accent-dim);
+  }
+  /* ring is a scaled pseudo-element so the pulse stays on the compositor */
+  .pulse::after{
+    content:""; position:absolute; inset:0; border-radius:50%;
+    background:var(--accent); opacity:0;
   }
 
   .hero h1{
@@ -411,9 +416,15 @@
 /* =========================== MOTION =========================== */
 @layer motion {
   @keyframes reveal{ from{ opacity:0; translate:0 16px } to{ opacity:1; translate:0 0 } }
-  @keyframes ping{ 0%{ box-shadow:0 0 0 0 var(--accent-dim) } 70%,100%{ box-shadow:0 0 0 9px transparent } }
+  @keyframes ping{ 0%{ transform:scale(1); opacity:.5 } 70%,100%{ transform:scale(3.4); opacity:0 } }
 
-  .pulse{ animation:ping 2.4s ease-out infinite }
+  .pulse::after{ animation:ping 2.4s ease-out infinite }
+
+  /* touch devices: backdrop blur on a sticky bar re-renders every scroll frame */
+  @media (hover: none){
+    nav{ backdrop-filter:none; background:color-mix(in oklab, var(--bg) 96%, transparent) }
+    .links a{ backdrop-filter:none; background:var(--surface) }
+  }
 
   @supports (animation-timeline: view()){
     .reveal{
@@ -1012,7 +1023,8 @@
     var cv = document.getElementById('signal');
     if (!cv || reduced) return;
     var ctx = cv.getContext('2d');
-    var w = 0, h = 0, dpr = Math.min(devicePixelRatio || 1, 2);
+    var touch = matchMedia('(hover: none)').matches;
+    var w = 0, h = 0, dpr = Math.min(devicePixelRatio || 1, touch ? 1.5 : 2);
     var stroke = '';
 
     function recolor() {
@@ -1042,7 +1054,20 @@
     var bits = [];
     for (var i = 0; i < 400; i++) bits.push((Math.sin(i * 12.9898) * 43758.5453 % 1 + 1) % 1 > 0.5 ? 1 : 0);
 
-    var off = 0, raf = 0;
+    var off = 0, raf = 0, visible = true, last = 0;
+    /* phones draw at ~30fps; the trace moves the same distance per second */
+    var frameMs = touch ? 28 : 0;
+    function loop(now) {
+      raf = requestAnimationFrame(loop);
+      if (now - last < frameMs) return;
+      var dt = last ? Math.min(now - last, 100) : 16.7;
+      last = now;
+      off += 0.65 * dt / 16.7;
+      draw();
+    }
+    function run() { if (!raf && visible && !document.hidden) { last = 0; raf = requestAnimationFrame(loop); } }
+    function halt() { cancelAnimationFrame(raf); raf = 0; }
+
     function draw() {
       ctx.clearRect(0, 0, w, h);
 
@@ -1086,17 +1111,28 @@
       }
       ctx.stroke();
       ctx.globalAlpha = 1;
-
-      off += 0.65;
-      raf = requestAnimationFrame(draw);
     }
 
-    recolor(); size(); draw();
-    window.__sig = { recolor: recolor };
-    addEventListener('resize', function () { size(); }, { passive: true });
+    recolor(); size(); draw(); run();
+    window.__sig = { recolor: function () { recolor(); draw(); } };
+
+    /* mobile address bar show/hide fires resize on scroll; only re-size on width changes */
+    var lastW = innerWidth;
+    addEventListener('resize', function () {
+      if (innerWidth === lastW) return;
+      lastW = innerWidth;
+      size(); draw();
+    }, { passive: true });
+
+    /* stop drawing once the hero is scrolled out of view */
+    if ('IntersectionObserver' in window) {
+      new IntersectionObserver(function (entries) {
+        visible = entries[0].isIntersecting;
+        visible ? run() : halt();
+      }).observe(cv);
+    }
     document.addEventListener('visibilitychange', function () {
-      if (document.hidden) cancelAnimationFrame(raf);
-      else raf = requestAnimationFrame(draw);
+      document.hidden ? halt() : run();
     });
   })();
 })();
