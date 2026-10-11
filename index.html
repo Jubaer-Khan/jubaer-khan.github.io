@@ -6,6 +6,7 @@
 <title>Md. Jubaer Khan — Embedded Systems Engineer</title>
 <meta name="description" content="Senior Software Engineer at BJIT. Embedded C/C++, RTOS, Embedded Linux and automotive systems. Co-author of XCR-Net, IEEE Transactions on Consumer Electronics.">
 <meta name="color-scheme" content="light dark">
+<script>try{var t=localStorage.getItem('theme');if(t==='light'||t==='dark')document.documentElement.setAttribute('data-theme',t)}catch(e){}</script>
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⚙️</text></svg>">
 
 <style>
@@ -57,6 +58,9 @@
     --accent-dim:oklch(0.760 0.135 232 / .14);
     --signal:    oklch(0.760 0.135 232 / .45);
   }
+
+  :root[data-theme="light"]{ color-scheme:light }
+  :root[data-theme="dark"]{ color-scheme:dark }
 
   *, *::before, *::after{ box-sizing:border-box }
   html{ scroll-behavior:smooth; scroll-padding-top:70px }
@@ -155,13 +159,29 @@
     @media (width < 720px){ & a.lnk{ display:none } }
   }
 
-  .icon-btn{
-    background:var(--surface); border:1px solid var(--line); color:var(--muted);
-    border-radius:9px; inline-size:34px; block-size:34px;
-    display:grid; place-items:center; cursor:pointer; font-size:15px;
-    transition:color .18s, border-color .18s, background .18s;
+  /* ---- light / dark switch ---- */
+  .theme-switch{
+    display:flex; gap:2px; padding:3px;
+    background:var(--surface); border:1px solid var(--line); border-radius:10px;
 
-    &:hover{ color:var(--accent); border-color:var(--accent) }
+    & button{
+      display:inline-flex; align-items:center; gap:6px;
+      block-size:28px; padding-inline:7px;
+      background:transparent; border:0; border-radius:7px;
+      color:var(--muted); font:inherit; font-size:13px; cursor:pointer;
+      transition:color .18s, background .18s;
+
+      &:hover{ color:var(--ink) }
+      &[aria-pressed="true"]{ background:var(--accent-dim); color:var(--accent) }
+      &:focus-visible{ outline:2px solid var(--accent); outline-offset:1px }
+    }
+    & svg{
+      inline-size:16px; block-size:16px;
+      fill:none; stroke:currentColor; stroke-width:2; stroke-linecap:round; stroke-linejoin:round;
+    }
+    /* icons only on wide screens, where the nav links need the room */
+    & span{ display:none }
+    @media (width < 720px){ & span{ display:inline } & button{ padding-inline:9px } }
   }
 
   /* ---- hero ---- */
@@ -458,7 +478,16 @@
     <a class="lnk" href="#opensource">Code</a>
     <a class="lnk" href="#research">Research</a>
     <a class="lnk" href="#skills">Skills</a>
-    <button id="themeBtn" class="icon-btn" aria-label="Toggle colour theme" title="Toggle theme">◐</button>
+    <div class="theme-switch" role="group" aria-label="Colour theme">
+      <button type="button" data-t="light" aria-pressed="false" title="Light theme">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"/></svg>
+        <span>Light</span>
+      </button>
+      <button type="button" data-t="dark" aria-pressed="false" title="Dark theme">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+        <span>Dark</span>
+      </button>
+    </div>
   </div>
 </nav>
 
@@ -785,25 +814,45 @@
   /* ---------- year ---------- */
   document.getElementById('yr').textContent = new Date().getFullYear();
 
-  /* ---------- theme (View Transitions where available) ---------- */
-  try {
-    var saved = localStorage.getItem('theme');
-    if (saved) root.setAttribute('data-theme', saved);
-  } catch (e) {}
+  /* ---------- theme switch (saved choice is applied in <head>) ---------- */
+  var osDark = matchMedia('(prefers-color-scheme: dark)');
+  var themeBtns = [].slice.call(document.querySelectorAll('.theme-switch button'));
 
-  function flipTheme() {
-    var cur = root.getAttribute('data-theme');
-    if (!cur) cur = matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
-    var next = cur === 'dark' ? 'light' : 'dark';
+  function currentTheme() {
+    return root.getAttribute('data-theme') || (osDark.matches ? 'dark' : 'light');
+  }
+  function syncSwitch() {
+    var cur = currentTheme();
+    themeBtns.forEach(function (b) { b.setAttribute('aria-pressed', String(b.dataset.t === cur)); });
+  }
+  function applyTheme(next) {
     root.setAttribute('data-theme', next);
     try { localStorage.setItem('theme', next); } catch (e) {}
+    syncSwitch();
     if (window.__sig) window.__sig.recolor();
   }
 
-  document.getElementById('themeBtn').addEventListener('click', function () {
-    if (document.startViewTransition && !reduced) document.startViewTransition(flipTheme);
-    else flipTheme();
+  themeBtns.forEach(function (b) {
+    b.addEventListener('click', function () {
+      var next = b.dataset.t;
+      if (next === currentTheme()) return;
+      if (document.startViewTransition && !reduced && !document.hidden) {
+        var vt = document.startViewTransition(function () { applyTheme(next); });
+        /* a skipped transition still applies the theme; don't log it as an error */
+        vt.ready.catch(function () {});
+        vt.updateCallbackDone.catch(function () {});
+        vt.finished.catch(function () {});
+      } else {
+        applyTheme(next);
+      }
+    });
   });
+  /* follow the OS setting until the visitor picks one */
+  if (osDark.addEventListener) osDark.addEventListener('change', function () {
+    syncSwitch();
+    if (window.__sig) window.__sig.recolor();
+  });
+  syncSwitch();
 
   /* ---------- sticky nav border ---------- */
   var nav = document.getElementById('nav');
