@@ -431,6 +431,10 @@
     .card h3{ font-size:16.5px }
   }
 
+  .team{
+    margin:11px 0 0; font-family:var(--mono); font-size:11px;
+    letter-spacing:.03em; color:var(--faint);
+  }
   .tags{ display:flex; flex-wrap:wrap; gap:5px }
   .tag{
     font-family:var(--mono); font-size:11px; letter-spacing:.015em;
@@ -541,7 +545,9 @@
     <p class="lede">
       I build embedded and desktop software for automotive and industrial systems at BJIT —
       C and C++ on RTOS and Embedded Linux, CAN&nbsp;2.0B and SAE&nbsp;J1939, written to MISRA and BARR-C.
-      Alongside that, I apply AI agents across the software development life cycle and publish research on deep learning for medical imaging.
+      Right now I lead the firmware for a cashless credit gateway for cash-handling terminals, on Arm Cortex-M
+      with FreeRTOS, lwIP and Ethernet. Alongside that I apply AI agents across the software development life
+      cycle and publish research on deep learning for medical imaging.
     </p>
     <div class="links">
       <a href="mailto:jubaer.adib@gmail.com">Email</a>
@@ -553,7 +559,7 @@
 
     <div class="stats reveal">
       <div><div class="num" data-to="5" data-suffix="+">0</div><div class="lbl">Years in industry</div></div>
-      <div><div class="num" data-to="12">0</div><div class="lbl">Projects delivered</div></div>
+      <div><div class="num" data-to="15">0</div><div class="lbl">Projects delivered</div></div>
       <div><div class="num" data-to="1">0</div><div class="lbl">IEEE journal paper</div></div>
     </div>
   </div>
@@ -571,8 +577,9 @@
       Much of it comes down to communication — CAN 2.0B and SAE J1939 in particular — and to the less glamorous
       side of safety-critical development: design review, MISRA compliance, and getting a Yocto image to behave
       on real hardware. The work is not only embedded, though. Qt and .NET desktop applications take up a good
-      share of it, as does migrating an ageing VB6 system to a web-based C#/.NET one. Lately I have been applying AI agents
-      across the software development life cycle.
+      share of it, as does migrating an ageing VB6 system to a web-based C#/.NET one. Right now I lead the firmware
+      for a cashless credit gateway for cash-handling terminals, and I have been applying AI agents across the
+      software development life cycle.
     </p>
     <p>
       My research interests began during my degree at North South University and have stayed since. I co-authored
@@ -592,10 +599,12 @@
       <p class="org">BJIT Ltd. · Dhaka, Bangladesh</p>
       <ul class="bul">
         <li>Technical leadership for embedded and PC application projects, owning system architecture and critical modules.</li>
+        <li>Leading a two-engineer firmware team, with the project architect, on a cashless credit gateway for cash-handling terminals &mdash; from protocol analysis to a multi-vendor proof of concept.</li>
         <li>Design and code reviews, enforcing MISRA-C, MISRA-C++ and BARR-C compliance across project teams.</li>
         <li>Mentoring junior and mid-level engineers through design walkthroughs and best-practice sharing.</li>
         <li>Requirement analysis, effort estimation and technical risk mitigation with product owners and stakeholders.</li>
         <li>Resolving complex system-level defects in RTOS and Embedded Linux environments.</li>
+        <li>Building AI-agent tooling in Python for in-house R&amp;D: monitoring agents, an MCP server for incident data, and RAG-based knowledge-base research.</li>
       </ul>
     </div>
 
@@ -651,73 +660,144 @@
       <button class="chip" data-f="desktop" aria-pressed="false">Desktop</button>
       <button class="chip" data-f="web" aria-pressed="false">Web</button>
       <button class="chip" data-f="ai" aria-pressed="false">AI</button>
-      <span class="count" id="count" aria-live="polite">8 projects</span>
+      <span class="count" id="count" aria-live="polite">15 projects</span>
     </div>
 
     <div class="grid" id="grid">
 
-      <article class="card reveal" data-cat="ai embedded">
+      <article class="card reveal" data-cat="embedded">
+        <span class="tile-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="6" y="6" width="12" height="12" rx="1.5"/><path d="M9 2v4M15 2v4M9 18v4M15 18v4M2 9h4M2 15h4M18 9h4M18 15h4"/></svg></span>
+        <h3>Cashless Credit Gateway for Cash-Handling Terminals</h3>
+        <span class="when">Sep 2026 &mdash; Present</span>
+        <p>Firmware for an inline bridge board that lets a merchant POS load credit onto a cash-handling terminal through its RS-232 bill-acceptor link. Proved feasibility by intercepting the full-duplex serial link, decoding traffic both ways and rewriting the money-bearing message, across seven terminal/bill-acceptor pairings from multiple vendors. Now porting to a dual-core Arm Cortex-M with FreeRTOS and lwIP for an Ethernet/TCP JSON link, plus a Flutter desktop app that simulates the merchant terminal.</p>
+        <div class="tags"><span class="tag">C</span><span class="tag">Arm Cortex-M</span><span class="tag">FreeRTOS</span><span class="tag">lwIP</span><span class="tag">RS-232</span><span class="tag">TCP/IP</span><span class="tag">Flutter</span></div>
+        <p class="team">Team lead, team of 4</p>
+      </article>
+
+      <article class="card reveal" data-cat="ai">
         <span class="tile-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="8" width="18" height="12" rx="2"/><path d="M12 8V4H8M2 14h2M20 14h2M15 13v2M9 13v2"/></svg></span>
-        <h3>Agentic SDLC &amp; AI Agent-Based Monitoring</h3>
-        <span class="when">Jul — Aug 2026</span>
-        <p>Two in-house R&amp;D initiatives: applying AI agents across the software development life cycle (requirements, design, coding, testing and review), and AI-agent-based monitoring software.</p>
-        <div class="tags"><span class="tag">AI agents</span><span class="tag">SDLC</span></div>
+        <h3>AI Agent-Based Monitoring Software</h3>
+        <span class="when">Jul &mdash; Aug 2026</span>
+        <p>In-house R&amp;D on an autonomous monitoring and incident-response platform. Built the client-side agent with 12 detectors (trend analysis, SLA and error-budget tracking, Docker, heartbeat, NTP drift, log retention) and per-server-type profiles, plus an operator-override workflow that runs exact commands over SSH and calls the LLM only for plain-language instructions. Followed with an MCP server turning an OpenTelemetry log stream into deduplicated incidents an agent queries as MCP tools. Every action needs human approval.</p>
+        <div class="tags"><span class="tag">Python</span><span class="tag">AI agents</span><span class="tag">LLM</span><span class="tag">MCP</span><span class="tag">OpenTelemetry</span><span class="tag">Grafana</span><span class="tag">Docker</span></div>
+        <p class="team">In-house R&amp;D, team of 4</p>
+      </article>
+
+      <article class="card reveal" data-cat="ai">
+        <span class="tile-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="8" width="18" height="12" rx="2"/><path d="M12 8V4H8M2 14h2M20 14h2M15 13v2M9 13v2"/></svg></span>
+        <h3>Agentic SDLC</h3>
+        <span class="when">Jul &mdash; Aug 2026</span>
+        <p>In-house R&amp;D applying AI agents across the software development life cycle. Researched agent memory for an automated-SDLC knowledge base: evaluated RAG with hybrid vector and knowledge-graph retrieval (Qdrant, Neo4j, ArangoDB) and memory frameworks (mem0, Zep, Letta), ran an ArangoDB proof of concept, assessed licensing risk and drafted the high-level design.</p>
+        <div class="tags"><span class="tag">AI agents</span><span class="tag">RAG</span><span class="tag">Qdrant</span><span class="tag">Neo4j</span><span class="tag">ArangoDB</span><span class="tag">SDLC</span></div>
+        <p class="team">In-house R&amp;D</p>
       </article>
 
       <article class="card reveal" data-cat="web desktop">
-        <span class="tile-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 12a9 9 0 0 1 15-6.7L21 8M21 3v5h-5M21 12a9 9 0 0 1-15 6.7L3 16M3 21v-5h5"/></svg></span>
-        <h3>Legacy Modernisation — VB6 to C#/.NET</h3>
-        <span class="when">Nov 2025 — Present</span>
-        <p>Migration of a legacy VB6 management application to a web-based C#/.NET system, including analysis of existing functionality and re-implementation.</p>
-        <div class="tags"><span class="tag">VB6</span><span class="tag">C#</span><span class="tag">.NET</span><span class="tag">ASP.NET</span></div>
+        <span class="tile-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c3 3.5 3 14 0 18-3-4-3-14.5 0-18z"/></svg></span>
+        <h3>Legacy Modernisation &mdash; VB6 to C#/.NET</h3>
+        <span class="when">Nov 2025 &mdash; May 2026</span>
+        <p>Migration of a legacy VB6 management application to a web-based C#/.NET system, covering analysis of existing functionality and re-implementation. Migrated VB6 forms and modules to Blazor Server, using GitHub Copilot prompt playbooks for AI-assisted migration.</p>
+        <div class="tags"><span class="tag">VB6</span><span class="tag">C#</span><span class="tag">.NET 8</span><span class="tag">Blazor Server</span><span class="tag">Radzen</span><span class="tag">PostgreSQL</span></div>
+        <p class="team">Team of 15</p>
       </article>
 
       <article class="card reveal" data-cat="embedded automotive">
-        <span class="tile-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 17h2c.6 0 1-.4 1-1v-3c0-.9-.7-1.7-1.5-1.9L18 10l-2.7-3.6A2 2 0 0 0 13.7 6H7.3a2 2 0 0 0-1.6.8L3 10.5V16c0 .6.4 1 1 1h1M9 17h6"/><circle cx="7" cy="17" r="2"/><circle cx="17" cy="17" r="2"/></svg></span>
-        <h3>Automotive Embedded Control Platform — 2nd gen</h3>
-        <span class="when">Feb — Nov 2025</span>
-        <p>Safety-critical embedded modules for automotive-grade vehicle systems, from analysis and detailed design through production and test.</p>
-        <div class="tags"><span class="tag">C</span><span class="tag">C++</span><span class="tag">CAN 2.0B</span><span class="tag">SAE J1939</span><span class="tag">RTOS</span></div>
-      </article>
-
-      <article class="card reveal" data-cat="embedded desktop">
-        <span class="tile-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 3h6M10 3v6L4.5 18.5A2 2 0 0 0 6.2 21.5h11.6a2 2 0 0 0 1.7-3L14 9V3M7 15h10"/></svg></span>
-        <h3>Internal R&amp;D &amp; Engineering Support Platforms</h3>
-        <span class="when">Nov 2023 — Present</span>
-        <p>Internal tools, proofs of concept and training platforms supporting on-the-job training and experimental work across embedded and desktop stacks.</p>
-        <div class="tags"><span class="tag">C#</span><span class="tag">C/C++</span><span class="tag">RTOS</span><span class="tag">Unity</span></div>
+        <span class="tile-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="6" y="6" width="12" height="12" rx="1.5"/><path d="M9 2v4M15 2v4M9 18v4M15 18v4M2 9h4M2 15h4M18 9h4M18 15h4"/></svg></span>
+        <h3>Vehicle Controller Migration &mdash; Turret &amp; Boom Control</h3>
+        <span class="when">Feb &mdash; Nov 2025</span>
+        <p>Safety-critical embedded modules for automotive-grade vehicle systems, from analysis and detailed design through production and test. Main developer of the controller application: SAE joystick handling, boom calibration, harness-ID detection, EEPROM configuration, graceful low-power shutdown and display/SIU CAN messaging. Also built a CAN simulator to test the controller off-vehicle.</p>
+        <div class="tags"><span class="tag">C</span><span class="tag">C++</span><span class="tag">CAN 2.0B</span><span class="tag">SAE J1939</span><span class="tag">NXP Power Architecture</span><span class="tag">CodeWarrior</span><span class="tag">PCAN</span></div>
+        <p class="team">Team of 5</p>
       </article>
 
       <article class="card reveal" data-cat="embedded">
-        <span class="tile-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m4 17 6-6-6-6M12 19h8"/></svg></span>
+        <span class="tile-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="8" width="14" height="10" rx="2"/><path d="M12 4v4M9 13h.01M15 13h.01M3 12v3M21 12v3"/></svg></span>
+        <h3>Boston Dynamics Spot &mdash; Custom Sensor Feasibility PoC</h3>
+        <span class="when">Nov 2024 &mdash; Jan 2025</span>
+        <p>In-house proof of concept checking whether a custom sensor could be added to and updated on a Boston Dynamics Spot robot. Studied the Spot SDK, built a mocked-SDK test harness in Python to exercise robot commands without the hardware, and prototyped a gRPC service for reading sensor pin values.</p>
+        <div class="tags"><span class="tag">Python</span><span class="tag">Spot SDK</span><span class="tag">gRPC</span><span class="tag">Protocol Buffers</span></div>
+        <p class="team">In-house R&amp;D</p>
+      </article>
+
+      <article class="card reveal" data-cat="embedded">
+        <span class="tile-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="8" width="14" height="10" rx="2"/><path d="M12 4v4M9 13h.01M15 13h.01M3 12v3M21 12v3"/></svg></span>
+        <h3>Industrial Automation Robotic Arm PoC</h3>
+        <span class="when">Jul &mdash; Oct 2024</span>
+        <p>In-house proof of concept for industrial automation: a Unity digital twin of a 6-DOF robotic arm with forward/inverse kinematics and smooth line-path planning, a 4-DOF pick-and-place colour-sorting demo, and a CAN-bus design for one main controller to discover and command multiple arms.</p>
+        <div class="tags"><span class="tag">Unity (C#)</span><span class="tag">C/C++</span><span class="tag">Arduino</span><span class="tag">Inverse kinematics</span><span class="tag">CAN</span></div>
+        <p class="team">In-house R&amp;D</p>
+      </article>
+
+      <article class="card reveal" data-cat="embedded">
+        <span class="tile-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="6" y="6" width="12" height="12" rx="1.5"/><path d="M9 2v4M15 2v4M9 18v4M15 18v4M2 9h4M2 15h4M18 9h4M18 15h4"/></svg></span>
         <h3>Custom Embedded Linux Distribution</h3>
-        <span class="when">Nov 2023 — Mar 2024</span>
-        <p>Built and customised Embedded Linux images for specific target hardware — layer configuration, package selection and image tuning.</p>
-        <div class="tags"><span class="tag">Yocto</span><span class="tag">Buildroot</span><span class="tag">Linux</span></div>
+        <span class="when">Jan &mdash; Jun 2024</span>
+        <p>Custom Embedded Linux images for a TI AM335x (BeagleBone-class) board with both Buildroot and Yocto (Dunfell): cross-compilation toolchain, U-Boot, a custom device tree and BSP layer, and SD-card image generation.</p>
+        <div class="tags"><span class="tag">Yocto</span><span class="tag">Buildroot</span><span class="tag">U-Boot</span><span class="tag">Device Tree</span><span class="tag">TI AM335x</span></div>
+        <p class="team">Team of 2</p>
+      </article>
+
+      <article class="card reveal" data-cat="embedded">
+        <span class="tile-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 20h16M6 16l9-9 3 3-9 9H6z"/></svg></span>
+        <h3>Bottle Recycling Machine &mdash; Concept &amp; Feasibility</h3>
+        <span class="when">Dec 2023 &mdash; Jan 2024</span>
+        <p>In-house concept study for a reverse vending machine that accepts plastic bottles and rewards users: detection process (capacitive and weight sensors, with camera-based detection as an option), sorting and storage features, and a BeagleBone Black hardware design with motor control, bill of materials and costing.</p>
+        <div class="tags"><span class="tag">BeagleBone Black</span><span class="tag">Embedded Linux</span><span class="tag">Sensors</span><span class="tag">Motor control</span></div>
+        <p class="team">In-house R&amp;D</p>
       </article>
 
       <article class="card reveal" data-cat="desktop">
-        <span class="tile-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></svg></span>
-        <h3>Cross-Platform Desktop Application</h3>
-        <span class="when">Sep — Oct 2023</span>
-        <p>High-performance cross-platform GUI application, covering requirement analysis, detailed design and implementation.</p>
-        <div class="tags"><span class="tag">C++</span><span class="tag">Qt</span></div>
+        <span class="tile-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="4" width="18" height="12" rx="2"/><path d="M8 20h8M12 16v4"/></svg></span>
+        <h3>Cross-Platform Desktop Application (Qt)</h3>
+        <span class="when">Oct &mdash; Dec 2023</span>
+        <p>Trial project: a log-viewer desktop application and logging library in C++/Qt 6, with multithreaded log loading, filtering, search, pause and archiving. Covered requirement analysis, design documents and implementation, with GoogleTest unit tests and cpplint checks.</p>
+        <div class="tags"><span class="tag">C++</span><span class="tag">Qt 6</span><span class="tag">CMake</span><span class="tag">GoogleTest</span></div>
+        <p class="team">Team of 2</p>
+      </article>
+
+      <article class="card reveal" data-cat="desktop">
+        <span class="tile-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="4" width="18" height="12" rx="2"/><path d="M8 20h8M12 16v4"/></svg></span>
+        <h3>PC &amp; Handheld Terminal Application Suite</h3>
+        <span class="when">Jul &mdash; Sep 2023</span>
+        <p>PC and handheld-terminal screens for a logistics data-capture system in RFgen: screen UI, VBA event logic and SQL queries for several warehouse screens, following the client&rsquo;s specification documents.</p>
+        <div class="tags"><span class="tag">RFgen</span><span class="tag">VBA</span><span class="tag">SQL</span><span class="tag">AWS CodeCommit</span></div>
+        <p class="team">Team of 3</p>
+      </article>
+
+      <article class="card reveal" data-cat="desktop">
+        <span class="tile-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="4" width="18" height="12" rx="2"/><path d="M8 20h8M12 16v4"/></svg></span>
+        <h3>Document Editor &amp; Viewer Feature Development</h3>
+        <span class="when">May &mdash; Jun 2023</span>
+        <p>Developed the text-editing feature of a large desktop PDF editor. Traced how PDF content streams are parsed and grouped into editable text objects, to fix broken words, wrongly grouped text boxes and mixed vertical/horizontal Japanese text.</p>
+        <div class="tags"><span class="tag">C#</span><span class="tag">C++</span><span class="tag">PDF internals</span><span class="tag">Visual Studio</span></div>
+        <p class="team">Team of 21</p>
       </article>
 
       <article class="card reveal" data-cat="web">
-        <span class="tile-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15 15 0 0 1 0 20 15 15 0 0 1 0-20"/></svg></span>
+        <span class="tile-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c3 3.5 3 14 0 18-3-4-3-14.5 0-18z"/></svg></span>
         <h3>Enterprise Asset Management Web Application</h3>
-        <span class="when">Mar — May 2023</span>
-        <p>Web-based asset management features with role-based access control, from investigation and basic design through detailed design.</p>
-        <div class="tags"><span class="tag">ASP.NET MVC</span><span class="tag">C#</span><span class="tag">Razor</span></div>
+        <span class="when">Feb &mdash; May 2023</span>
+        <p>Web-based asset management features with role-based access control: master-data and inspection pages with search and pagination, and English/Japanese localization across the application.</p>
+        <div class="tags"><span class="tag">ASP.NET MVC</span><span class="tag">C#</span><span class="tag">Razor</span><span class="tag">Entity Framework</span><span class="tag">jQuery</span></div>
+        <p class="team">Team of 6</p>
       </article>
 
       <article class="card reveal" data-cat="embedded automotive">
-        <span class="tile-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 17h2c.6 0 1-.4 1-1v-3c0-.9-.7-1.7-1.5-1.9L18 10l-2.7-3.6A2 2 0 0 0 13.7 6H7.3a2 2 0 0 0-1.6.8L3 10.5V16c0 .6.4 1 1 1h1M9 17h6"/><circle cx="7" cy="17" r="2"/><circle cx="17" cy="17" r="2"/></svg></span>
-        <h3>Automotive Embedded Control Platform — 1st gen</h3>
-        <span class="when">Jun 2022 — Feb 2023</span>
-        <p>Vehicle interface management software for an automotive client, covering analysis, detailed design, production and test under embedded coding standards.</p>
-        <div class="tags"><span class="tag">C</span><span class="tag">C++</span><span class="tag">CAN 2.0B</span><span class="tag">Python</span></div>
+        <span class="tile-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="6" y="6" width="12" height="12" rx="1.5"/><path d="M9 2v4M15 2v4M9 18v4M15 18v4M2 9h4M2 15h4M18 9h4M18 15h4"/></svg></span>
+        <h3>Legacy Vehicle Interface Module Firmware Migration</h3>
+        <span class="when">Jun 2022 &mdash; Feb 2023</span>
+        <p>Migrated a truck body controller&rsquo;s legacy VIM firmware from a Motorola 68332 with Nucleus RTOS to a new rugged PowerPC controller. Reverse-engineered the old module&rsquo;s hardware, CAN messaging and I/O; mapped pins and I/O to the new controller; adapted the SCons/Conan build to generate I/O configuration from XML; built a PC version for off-target testing; and ran PCAN-based migration tests across three truck/engine variants.</p>
+        <div class="tags"><span class="tag">C</span><span class="tag">C++</span><span class="tag">CAN 2.0B</span><span class="tag">SAE J1939</span><span class="tag">Nucleus RTOS</span><span class="tag">SCons/Conan</span><span class="tag">PCAN</span></div>
+        <p class="team">Team of 6</p>
+      </article>
+
+      <article class="card reveal" data-cat="embedded">
+        <span class="tile-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="6" y="6" width="12" height="12" rx="1.5"/><path d="M9 2v4M15 2v4M9 18v4M15 18v4M2 9h4M2 15h4M18 9h4M18 15h4"/></svg></span>
+        <h3>Automated Teller Machine Control System</h3>
+        <span class="when">May &mdash; Jun 2022</span>
+        <p>BJIT Academy embedded-course project: requirement analysis, use-case extraction and OOAD/UML design of an ATM control system, implemented in C++ as a PC terminal application.</p>
+        <div class="tags"><span class="tag">C++</span><span class="tag">OOAD/UML</span><span class="tag">Makefile</span></div>
+        <p class="team">Team of 5</p>
       </article>
 
     </div>
@@ -809,13 +889,13 @@
     <h2 class="sec-label reveal">Skills</h2>
     <dl style="margin:0" class="reveal">
       <div class="skill-row"><dt>Programming Languages</dt><dd>C, C++ (Embedded C/C++, Visual C++), Python, C#, VB.NET, Java, JavaScript</dd></div>
-      <div class="skill-row"><dt>Embedded &amp; RTOS</dt><dd>RTOS, Embedded Linux (Yocto, Buildroot), STM32 and ESP32/ESP8266, embedded system design, peripheral and sensor interfacing, schematic and datasheet analysis</dd></div>
-      <div class="skill-row"><dt>Protocols</dt><dd>CAN 2.0B, SAE J1939, UART, SPI, I2C, RFID, Wi-Fi</dd></div>
+      <div class="skill-row"><dt>Embedded &amp; RTOS</dt><dd>RTOS (FreeRTOS), lwIP TCP/IP stack, Embedded Linux (Yocto, Buildroot), STM32 ecosystem, ESP32/ESP8266, embedded system design, peripheral and sensor interfacing, schematic and datasheet analysis</dd></div>
+      <div class="skill-row"><dt>Protocols</dt><dd>CAN 2.0B, SAE J1939, RS-232, UART, SPI, I2C, TCP/IP, Ethernet, RFID, Wi-Fi</dd></div>
       <div class="skill-row"><dt>Standards</dt><dd>MISRA-C, MISRA-C++, BARR-C, design patterns, UML, OOAD, test-driven development</dd></div>
-      <div class="skill-row"><dt>Desktop &amp; Web</dt><dd>Qt, MFC, .NET Framework / .NET Core, ASP.NET MVC, Razor, Flask, Django, HTML, CSS, Bootstrap</dd></div>
+      <div class="skill-row"><dt>Desktop &amp; Web</dt><dd>Qt, Flutter/Dart, MFC, .NET Framework / .NET Core, ASP.NET MVC, Razor, Flask, Django, HTML, CSS, Bootstrap</dd></div>
       <div class="skill-row"><dt>Databases</dt><dd>MySQL, MS SQL Server</dd></div>
-      <div class="skill-row"><dt>AI &amp; ML</dt><dd>AI agents and agentic workflows, TensorFlow, Keras, CNNs, NLP, Word2vec</dd></div>
-      <div class="skill-row"><dt>Tools</dt><dd>Git, GitHub, Bitbucket, Jira, Confluence, Visual Studio, VS Code, PlatformIO, Arduino IDE, CodeWarrior, Orchestra Suite, Agile/Scrum</dd></div>
+      <div class="skill-row"><dt>AI &amp; ML</dt><dd>AI agents and agentic workflows, LLM agent orchestration, human-in-the-loop approval workflows, RAG (vector + knowledge-graph retrieval), MCP servers, TensorFlow, Keras, CNNs, NLP, Word2vec</dd></div>
+      <div class="skill-row"><dt>Tools</dt><dd>Git, GitHub, Bitbucket, Jira, Confluence, Visual Studio, VS Code, PlatformIO, Arduino IDE, CodeWarrior, Orchestra Suite, OpenTelemetry, Grafana, Prometheus, Loki, Agile/Scrum</dd></div>
       <div class="skill-row"><dt>Other</dt><dd>Unity, LaTeX, Figma</dd></div>
       <div class="skill-row"><dt>Spoken Languages</dt><dd>Bangla — native · English — fluent</dd></div>
     </dl>
@@ -831,7 +911,7 @@
       <div class="tile-body">
         <h3>B.Sc. in Computer Science &amp; Engineering</h3>
         <p class="org">North South University, Dhaka</p>
-        <span class="pill">Cum Laude</span>
+        <span class="pill">Graduated Cum Laude</span>
       </div>
       <span class="when">2017 — 2021</span>
     </article>
