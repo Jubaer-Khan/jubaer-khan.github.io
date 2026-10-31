@@ -1,0 +1,1603 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Md. Jubaer Khan — Embedded Systems Engineer</title>
+<meta name="description" content="Senior Software Engineer at BJIT. Embedded C/C++, RTOS, Embedded Linux and automotive systems. Co-author of XCR-Net, IEEE Transactions on Consumer Electronics.">
+<meta name="color-scheme" content="light dark">
+<script>try{var t=localStorage.getItem('theme');if(t==='light'||t==='dark')document.documentElement.setAttribute('data-theme',t)}catch(e){}</script>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⚙️</text></svg>">
+
+<style>
+@layer base, layout, components, motion;
+
+/* ============================ BASE ============================ */
+@layer base {
+  :root{
+    --bg:        oklch(0.993 0.002 250);
+    --surface:   oklch(0.975 0.004 250);
+    --surface-2: oklch(0.955 0.006 250);
+    --line:      oklch(0.905 0.008 250);
+    --ink:       oklch(0.215 0.015 250);
+    --muted:     oklch(0.475 0.018 250);
+    --faint:     oklch(0.635 0.015 250);
+    --accent:    oklch(0.525 0.155 248);
+    --accent-dim:oklch(0.525 0.155 248 / .10);
+    --signal:    oklch(0.58 0.14 248 / .40);
+
+    --radius: 12px;
+    --mono: ui-monospace, "SF Mono", SFMono-Regular, Menlo, Consolas, monospace;
+    --sans: "Inter var", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    --maxw: 860px;
+  }
+
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){
+      --bg:        oklch(0.165 0.014 258);
+      --surface:   oklch(0.205 0.017 258);
+      --surface-2: oklch(0.245 0.020 258);
+      --line:      oklch(0.295 0.020 258);
+      --ink:       oklch(0.945 0.008 258);
+      --muted:     oklch(0.735 0.018 258);
+      --faint:     oklch(0.575 0.018 258);
+      --accent:    oklch(0.760 0.135 232);
+      --accent-dim:oklch(0.760 0.135 232 / .14);
+      --signal:    oklch(0.760 0.135 232 / .45);
+    }
+  }
+  :root[data-theme="dark"]{
+    --bg:        oklch(0.165 0.014 258);
+    --surface:   oklch(0.205 0.017 258);
+    --surface-2: oklch(0.245 0.020 258);
+    --line:      oklch(0.295 0.020 258);
+    --ink:       oklch(0.945 0.008 258);
+    --muted:     oklch(0.735 0.018 258);
+    --faint:     oklch(0.575 0.018 258);
+    --accent:    oklch(0.760 0.135 232);
+    --accent-dim:oklch(0.760 0.135 232 / .14);
+    --signal:    oklch(0.760 0.135 232 / .45);
+  }
+
+  :root[data-theme="light"]{ color-scheme:light }
+  :root[data-theme="dark"]{ color-scheme:dark }
+
+  *, *::before, *::after{ box-sizing:border-box }
+  html{ scroll-behavior:smooth; scroll-padding-top:70px }
+
+  body{
+    margin:0;
+    background:var(--bg);
+    color:var(--ink);
+    font-family:var(--sans);
+    font-size:16px;
+    line-height:1.62;
+    -webkit-font-smoothing:antialiased;
+    text-rendering:optimizeLegibility;
+    overflow-x:hidden;
+  }
+
+  h1,h2,h3{ margin:0; line-height:1.18; letter-spacing:-0.022em }
+  p{ margin:0 0 15px }
+  p:last-child{ margin-bottom:0 }
+  img{ max-width:100% }
+
+  a{
+    color:var(--accent);
+    text-decoration:none;
+    text-underline-offset:3px;
+
+    &:hover{ text-decoration:underline }
+    &:focus-visible{ outline:2px solid var(--accent); outline-offset:3px; border-radius:3px }
+  }
+
+  ::selection{ background:var(--accent-dim); color:var(--ink) }
+}
+
+/* =========================== LAYOUT =========================== */
+@layer layout {
+  .wrap{ max-width:var(--maxw); margin-inline:auto; padding-inline:24px }
+
+  section{
+    padding-block:58px;
+    border-top:1px solid var(--line);
+  }
+
+  .sec-label{
+    position:relative;
+    inline-size:fit-content;
+    font-size:clamp(34px, 7vw, 52px);
+    font-weight:800;
+    line-height:1.08;
+    letter-spacing:-0.035em;
+    padding-bottom:14px;
+    margin-bottom:32px;
+    color:var(--accent);
+
+    /* short accent bar under the title */
+    &::after{
+      content:"";
+      position:absolute; left:0; bottom:0;
+      inline-size:64px; block-size:4px; border-radius:2px;
+      background:var(--accent);
+    }
+  }
+}
+
+/* ========================= COMPONENTS ========================= */
+@layer components {
+
+  /* ---- nav ---- */
+  nav{
+    position:sticky; top:0; z-index:20;
+    background:color-mix(in oklab, var(--bg) 82%, transparent);
+    backdrop-filter:saturate(180%) blur(12px);
+    border-bottom:1px solid transparent;
+    transition:border-color .25s;
+
+    &.stuck{ border-bottom-color:var(--line) }
+
+    & .wrap{ display:flex; align-items:center; gap:24px; height:58px }
+
+    & .brand{
+      font-weight:640; letter-spacing:-.02em; margin-right:auto;
+      font-size:15.5px;
+    }
+    & .brand .dot{ color:var(--accent) }
+
+    & a.lnk{
+      color:var(--muted); font-size:14px; position:relative; padding-block:4px;
+
+      &::after{
+        content:""; position:absolute; inset-inline:0; bottom:0; height:1.5px;
+        background:var(--accent); scale:0 1; transition:scale .22s ease;
+        transform-origin:left;
+      }
+      &:hover{ color:var(--ink); text-decoration:none }
+      &:hover::after, &.active::after{ scale:1 1 }
+      &.active{ color:var(--ink) }
+    }
+
+    @media (width < 720px){ & a.lnk{ display:none } }
+  }
+
+  /* ---- light / dark switch ---- */
+  .theme-switch{
+    display:flex; gap:2px; padding:3px;
+    background:var(--surface); border:1px solid var(--line); border-radius:10px;
+
+    & button{
+      display:inline-flex; align-items:center; gap:6px;
+      block-size:28px; padding-inline:7px;
+      background:transparent; border:0; border-radius:7px;
+      color:var(--muted); font:inherit; font-size:13px; cursor:pointer;
+      transition:color .18s, background .18s;
+
+      &:hover{ color:var(--ink) }
+      &[aria-pressed="true"]{ background:var(--accent-dim); color:var(--accent) }
+      &:focus-visible{ outline:2px solid var(--accent); outline-offset:1px }
+    }
+    & svg{
+      inline-size:16px; block-size:16px;
+      fill:none; stroke:currentColor; stroke-width:2; stroke-linecap:round; stroke-linejoin:round;
+    }
+    /* icons only on wide screens, where the nav links need the room */
+    & span{ display:none }
+    @media (width < 720px){ & span{ display:inline } & button{ padding-inline:9px } }
+  }
+
+  /* ---- hero ---- */
+  .hero{
+    position:relative;
+    padding-block:76px 56px;
+    isolation:isolate;
+    overflow:hidden;
+  }
+  #signal{
+    position:absolute; inset:0; inline-size:100%; block-size:100%;
+    z-index:-1; pointer-events:none; opacity:.85;
+    /* keep the trace clear of the text column, fade top and bottom */
+    mask-image:
+      linear-gradient(90deg, transparent 0%, #000 52%),
+      linear-gradient(180deg, transparent 0%, #000 20%, #000 88%, transparent 100%);
+    mask-composite:intersect;
+    -webkit-mask-image:
+      linear-gradient(90deg, transparent 0%, #000 52%),
+      linear-gradient(180deg, transparent 0%, #000 20%, #000 88%, transparent 100%);
+    -webkit-mask-composite:source-in;
+  }
+
+  .eyebrow{
+    font-family:var(--mono); font-size:12px; letter-spacing:.1em;
+    color:var(--accent); text-transform:uppercase; margin-bottom:14px;
+    display:inline-flex; align-items:center; gap:8px;
+  }
+  .pulse{
+    position:relative;
+    inline-size:7px; block-size:7px; border-radius:50%;
+    background:var(--accent);
+  }
+  /* ring is a scaled pseudo-element so the pulse stays on the compositor */
+  .pulse::after{
+    content:""; position:absolute; inset:0; border-radius:50%;
+    background:var(--accent); opacity:0;
+  }
+
+  .hero h1{
+    font-size:clamp(34px, 7vw, 54px);
+    font-weight:700;
+    margin-bottom:12px;
+  }
+  .hero .role{
+    font-size:clamp(16px, 2.6vw, 20px);
+    color:var(--ink); font-weight:500; margin-bottom:18px;
+  }
+  .hero .role .sep{ color:var(--accent); margin-inline:9px }
+  .hero .role .nb{ white-space:nowrap }
+  .hero .lede{
+    font-size:clamp(15.5px, 2.2vw, 17.5px);
+    color:var(--muted); max-width:60ch; margin-bottom:0;
+  }
+
+  /* ---- hero avatar ---- */
+  .hero-top{
+    display:flex; align-items:stretch; gap:0px;
+    margin-bottom:14px;
+  }
+  .hero-intro{ flex:1; min-width:0 }
+
+  /* diameter comes from the row: role line down to the end of the lede */
+  .avatar-wrap{
+    position:relative; flex:none; align-self:center;
+    inline-size:250px; block-size:250px;   /* fallback; JS matches the column */
+  }
+  .avatar-wrap::before{
+    content:""; position:absolute; inset:-9%;
+    border-radius:50%; z-index:0;
+    background:radial-gradient(circle at 50% 45%,
+      color-mix(in oklab, var(--accent) 34%, transparent) 0%,
+      color-mix(in oklab, var(--accent) 12%, transparent) 46%,
+      transparent 70%);
+    filter:blur(10px);
+  }
+  .avatar{
+    position:absolute; inset:0; z-index:1;
+    inline-size:100%; block-size:100%;
+    border-radius:50%; object-fit:cover; object-position:center 14%;
+    border:4px solid var(--bg);
+    box-shadow:0 2px 6px rgb(0 0 0 / .12), 0 22px 48px -22px rgb(0 0 0 / .48);
+    background:var(--surface);
+  }
+
+  @media (width < 900px){ .avatar-wrap{ inline-size:215px; block-size:215px } }
+  @media (width < 760px){
+    .hero-top{ flex-direction:column-reverse; align-items:flex-start; gap:22px }
+    .avatar-wrap{ align-self:flex-start; inline-size:190px; block-size:190px }
+  }
+
+  /* ---- stacked full-width tiles (Education) ---- */
+  .stack{ display:grid; gap:14px }
+
+  .links{ display:flex; flex-wrap:wrap; gap:9px; margin-bottom:10px }
+  .links a{
+    display:inline-flex; align-items:center; gap:7px;
+    border:1px solid var(--line); background:color-mix(in oklab, var(--surface) 70%, transparent);
+    padding:8px 15px; border-radius:999px;
+    font-size:14px; color:var(--ink); backdrop-filter:blur(6px);
+    transition:border-color .18s, color .18s, translate .18s;
+
+    &:hover{ border-color:var(--accent); color:var(--accent); text-decoration:none; translate:0 -2px }
+  }
+
+  /* ---- stats ---- */
+  .stats{
+    display:grid; grid-template-columns:repeat(3, 1fr);
+    gap:1px; background:var(--line);
+    border:1px solid var(--line); border-radius:var(--radius);
+    overflow:hidden; margin-top:66px;
+
+    & > div{ background:var(--bg); padding:18px 20px }
+    & .num{
+      font-family:var(--mono); font-size:clamp(22px, 4vw, 30px);
+      font-weight:600; color:var(--accent); line-height:1.1;
+      font-variant-numeric:tabular-nums;
+    }
+    & .lbl{ font-size:12.5px; color:var(--faint); margin-top:3px; letter-spacing:.02em }
+  }
+
+  /* ---- timeline items ---- */
+  .item{
+    padding-bottom:26px; margin-bottom:26px;
+    border-bottom:1px dashed var(--line);
+    &:last-child{ padding-bottom:0; margin-bottom:0; border-bottom:none }
+  }
+  .item-head{
+    display:flex; flex-wrap:wrap; align-items:baseline; gap:3px 14px; margin-bottom:4px;
+    & h3{ font-size:17.5px; font-weight:620 }
+  }
+  .when{
+    margin-left:auto; color:var(--faint);
+    font-family:var(--mono); font-size:12.5px;
+    font-variant-numeric:tabular-nums; white-space:nowrap;
+  }
+  @media (width < 640px){ .when{ margin-left:0; inline-size:100% } }
+
+  .org{ color:var(--accent); font-size:14.5px; font-weight:550; margin-bottom:11px }
+
+  ul.bul{
+    margin:0; padding-left:0; list-style:none; color:var(--muted);
+    & li{
+      position:relative; padding-left:18px; margin-bottom:7px;
+      &::before{
+        content:""; position:absolute; left:2px; top:.68em;
+        inline-size:5px; block-size:5px; border-radius:1px;
+        background:var(--accent); opacity:.55;
+      }
+      &:last-child{ margin-bottom:0 }
+    }
+  }
+
+  /* ---- CAN frame visualiser ---- */
+  .canframe{
+    border:1px solid var(--line); border-radius:var(--radius);
+    background:var(--surface); padding:17px 18px 15px; margin-bottom:24px;
+  }
+  .cf-head{
+    font-family:var(--mono); font-size:11px; letter-spacing:.12em;
+    text-transform:uppercase; color:var(--faint); margin-bottom:11px;
+  }
+  .cf-track{ display:flex; gap:3px; block-size:46px }
+  .cf-field{
+    flex:var(--w) 1 0; min-inline-size:0;
+    background:var(--surface-2); border-radius:5px;
+    display:grid; place-items:center; gap:0;
+    font-family:var(--mono); font-size:10px; color:var(--faint);
+    box-shadow:inset 0 0 0 1px transparent;
+    transition:background .3s, color .3s, box-shadow .3s;
+    overflow:hidden; white-space:nowrap;
+
+    &.on{
+      background:var(--accent-dim); color:var(--accent);
+      box-shadow:inset 0 0 0 1px var(--accent);
+    }
+  }
+  .cf-field .bits{ font-size:9px; opacity:.65 }
+  .cf-cap{
+    margin:12px 0 0; font-size:13.5px; color:var(--muted);
+    min-block-size:1.5em;
+    & b{ color:var(--accent); font-family:var(--mono); font-size:12.5px; font-weight:600 }
+  }
+  @media (width < 640px){
+    .cf-field{ font-size:9px; letter-spacing:-.02em }
+    .cf-field .bits{ display:none }
+  }
+
+  /* ---- repo cards ---- */
+  .repo{
+    display:flex; flex-direction:column;
+    & .repo-top{ display:flex; align-items:center; gap:8px; margin-bottom:7px }
+    & .lang{
+      font-family:var(--mono); font-size:11px; color:var(--faint);
+      display:inline-flex; align-items:center; gap:5px; margin-left:auto;
+    }
+    & .dot-lang{ inline-size:8px; block-size:8px; border-radius:50%; background:var(--accent) }
+    & h3 a{ color:var(--ink); &:hover{ color:var(--accent); text-decoration:none } }
+    & .repo-foot{ margin-top:auto; padding-top:12px }
+  }
+
+  /* ---- filter chips ---- */
+  .filters{ display:flex; flex-wrap:wrap; gap:8px; margin-bottom:22px }
+  .chip{
+    font-family:var(--mono); font-size:12.5px;
+    border:1px solid var(--line); background:var(--surface);
+    color:var(--muted); padding:6px 13px; border-radius:999px;
+    cursor:pointer; transition:all .18s;
+
+    &:hover{ color:var(--ink); border-color:var(--muted) }
+    &[aria-pressed="true"]{
+      background:var(--accent-dim); border-color:var(--accent); color:var(--accent);
+    }
+  }
+  .count{ color:var(--faint); font-family:var(--mono); font-size:12.5px; margin-left:auto; align-self:center }
+
+  /* ---- project cards ---- */
+  .grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fill, minmax(250px, 1fr));
+    gap:14px;
+  }
+  .card{
+    container-type:inline-size;
+    position:relative; isolation:isolate;
+    border:1px solid var(--line); border-radius:var(--radius);
+    background:var(--surface); padding:19px 20px;
+    transition:border-color .22s, translate .22s, box-shadow .22s;
+
+    /* pointer-tracked spotlight */
+    &::before{
+      content:""; position:absolute; inset:0; z-index:-1; border-radius:inherit;
+      background:radial-gradient(240px circle at var(--mx, 50%) var(--my, 0%), var(--accent-dim), transparent 70%);
+      opacity:0; transition:opacity .25s;
+    }
+    &:hover{ border-color:color-mix(in oklab, var(--accent) 45%, var(--line)); translate:0 -3px }
+    &:hover::before{ opacity:1 }
+
+    & h3{ font-size:15.5px; font-weight:620; margin-bottom:6px }
+    & .when{ margin:0 0 10px; display:block; inline-size:auto }
+    & p{ font-size:14.5px; color:var(--muted); margin-bottom:12px }
+  }
+  .card[hidden]{ display:none }
+
+  /* ---- tiles ---- */
+  .tile-icon{
+    inline-size:42px; block-size:42px; border-radius:11px;
+    display:grid; place-items:center; flex-shrink:0;
+    background:var(--accent-dim); color:var(--accent);
+    margin-bottom:14px;
+    transition:background .22s, color .22s;
+    & svg{
+      inline-size:22px; block-size:22px;
+      fill:none; stroke:currentColor; stroke-width:1.8; stroke-linecap:round; stroke-linejoin:round;
+    }
+  }
+  .card:hover .tile-icon{ background:var(--accent); color:var(--bg) }
+  .repo-top .tile-icon{ margin-bottom:6px }
+
+  .tile{
+    display:flex; flex-direction:column;
+    & .org{ font-size:14px; margin-bottom:8px }
+    & .when{ margin:0 0 10px; display:block; inline-size:auto }
+    & p:last-child{ margin-bottom:0 }
+  }
+  .tile-wide{
+    flex-direction:row; align-items:flex-start; gap:18px;
+    & .tile-icon{ margin-bottom:0 }
+    & .tile-body{ flex:1 }
+    & h3{ font-size:17.5px }
+    & .when{ margin:4px 0 0 auto }
+    @media (width < 640px){
+      flex-direction:column; gap:0;
+      & .tile-icon{ margin-bottom:14px }
+      & .when{ margin:10px 0 0 }
+    }
+  }
+  .pill{
+    display:inline-block; font-size:12.5px; font-weight:600;
+    padding:3px 11px; border-radius:999px;
+    background:var(--accent-dim); color:var(--accent);
+  }
+
+  @container (min-width: 330px){
+    .card h3{ font-size:16.5px }
+  }
+
+  .team{
+    margin:11px 0 0; font-family:var(--mono); font-size:11px;
+    letter-spacing:.03em; color:var(--faint);
+  }
+  .tags{ display:flex; flex-wrap:wrap; gap:5px }
+
+  /* ---- contact ---- */
+  .contact-wrap{
+    display:grid; gap:26px;
+    grid-template-columns:minmax(0,1.25fr) minmax(0,1fr);
+  }
+  @media (width < 760px){ .contact-wrap{ grid-template-columns:1fr } }
+
+  .field{ margin-bottom:14px }
+  .field label{
+    display:block; font-size:12.5px; font-family:var(--mono);
+    letter-spacing:.06em; text-transform:uppercase;
+    color:var(--faint); margin-bottom:6px;
+  }
+  .field input, .field textarea{
+    width:100%; font:inherit; font-size:15px; color:var(--ink);
+    background:var(--surface); border:1px solid var(--line);
+    border-radius:9px; padding:10px 13px;
+    transition:border-color .18s, background .18s;
+  }
+  .field textarea{ min-height:132px; resize:vertical; line-height:1.55 }
+  .field input::placeholder, .field textarea::placeholder{ color:var(--faint) }
+  .field input:focus, .field textarea:focus{
+    outline:none; border-color:var(--accent);
+    background:color-mix(in oklab, var(--surface) 70%, var(--bg));
+  }
+  .field input:user-invalid, .field textarea:user-invalid{ border-color:#d9534f }
+
+  .send{
+    display:inline-flex; align-items:center; gap:8px;
+    font:inherit; font-size:15px; font-weight:560; cursor:pointer;
+    color:var(--bg); background:var(--accent);
+    border:1px solid var(--accent); border-radius:999px;
+    padding:10px 22px; transition:translate .18s, opacity .18s;
+  }
+  .send:hover{ translate:0 -2px; opacity:.92 }
+
+  .send-note{
+    margin-top:11px; font-size:13px; color:var(--faint);
+    min-block-size:1.3em;
+  }
+  .send-note a{ color:var(--accent) }
+
+  .contact-direct{
+    border:1px solid var(--line); border-radius:var(--radius);
+    background:var(--surface); padding:19px 20px; align-self:start;
+  }
+  .contact-direct h3{ font-size:15px; font-weight:620; margin-bottom:4px }
+  .contact-direct p{ font-size:13.5px; color:var(--muted); margin-bottom:15px }
+  .contact-direct ul{ list-style:none; margin:0; padding:0 }
+  .contact-direct li{ padding-block:7px; border-bottom:1px solid var(--line) }
+  .contact-direct li:last-child{ border-bottom:none }
+  .contact-direct li span{
+    font-family:var(--mono); font-size:11px; letter-spacing:.06em;
+    text-transform:uppercase; color:var(--faint); display:block; margin-bottom:1px;
+  }
+  .contact-direct li a{ font-size:14.5px; word-break:break-word }
+
+  .tag{
+    font-family:var(--mono); font-size:11px; letter-spacing:.015em;
+    background:var(--surface-2); color:var(--muted);
+    padding:3px 8px; border-radius:6px; white-space:nowrap;
+    border:1px solid transparent; transition:color .18s, border-color .18s;
+  }
+  .card:hover .tag{ color:var(--accent); border-color:var(--accent-dim) }
+
+  /* ---- publications ---- */
+  .pub{
+    padding:18px 20px; border:1px solid var(--line);
+    border-left:3px solid var(--accent);
+    border-radius:var(--radius); margin-bottom:12px; background:var(--surface);
+    &:last-child{ margin-bottom:0 }
+    & h3{ font-size:16px; font-weight:620; margin-bottom:7px }
+  }
+  .authors{ font-size:14px; color:var(--muted); margin-bottom:5px }
+  .authors b{ color:var(--ink); font-weight:650 }
+  .venue{ font-size:13.5px; color:var(--faint); font-style:italic; margin:0 }
+
+  /* ---- skills ---- */
+  .skill-row{
+    display:grid; grid-template-columns:185px 1fr; gap:8px 22px;
+    padding-block:12px; border-bottom:1px solid var(--line);
+    &:last-child{ border-bottom:none }
+    & dt{ font-weight:600; font-size:14.5px }
+    & dd{ margin:0; color:var(--muted); font-size:14.5px }
+    @media (width < 640px){ grid-template-columns:1fr; gap:2px }
+  }
+
+  /* ---- footer ---- */
+  footer{
+    padding-block:34px 46px; color:var(--faint); font-size:13.5px;
+    border-top:1px solid var(--line);
+    & .wrap{ display:flex; flex-wrap:wrap; gap:10px 18px; align-items:center }
+    & a{ color:var(--muted); &:hover{ color:var(--accent) } }
+  }
+  .f-links{ margin-left:auto; display:flex; gap:14px; flex-wrap:wrap }
+  @media (width < 560px){ .f-links{ margin-left:0 } }
+}
+
+/* =========================== MOTION =========================== */
+@layer motion {
+  @keyframes reveal{ from{ opacity:0; translate:0 16px } to{ opacity:1; translate:0 0 } }
+  @keyframes ping{ 0%{ transform:scale(1); opacity:.5 } 70%,100%{ transform:scale(3.4); opacity:0 } }
+
+  .pulse::after{ animation:ping 2.4s ease-out infinite }
+
+  /* touch devices: backdrop blur on a sticky bar re-renders every scroll frame */
+  @media (hover: none){
+    nav{ backdrop-filter:none; background:color-mix(in oklab, var(--bg) 96%, transparent) }
+    .links a{ backdrop-filter:none; background:var(--surface) }
+  }
+
+  @supports (animation-timeline: view()){
+    .reveal{
+      animation:reveal linear both;
+      animation-timeline:view();
+      animation-range:entry 0% entry 55%;
+    }
+  }
+  @supports not (animation-timeline: view()){
+    .reveal{ opacity:0; translate:0 16px; transition:opacity .6s ease, translate .6s ease }
+    .reveal.in{ opacity:1; translate:0 0 }
+  }
+
+  @media (prefers-reduced-motion: reduce){
+    *, *::before, *::after{
+      animation-duration:.001ms !important; animation-iteration-count:1 !important;
+      transition-duration:.001ms !important; scroll-behavior:auto !important;
+    }
+    .reveal{ opacity:1 !important; translate:none !important }
+  }
+}
+</style>
+</head>
+<body>
+
+<nav id="nav">
+  <div class="wrap">
+    <span class="brand">Md. Jubaer Khan<span class="dot">.</span></span>
+    <a class="lnk" href="#about">About</a>
+    <a class="lnk" href="#experience">Experience</a>
+    <a class="lnk" href="#work">Work</a>
+    <a class="lnk" href="#opensource">Academic</a>
+    <a class="lnk" href="#research">Research</a>
+    <a class="lnk" href="#skills">Skills</a>
+    <a class="lnk" href="#contact">Contact</a>
+    <div class="theme-switch" role="group" aria-label="Colour theme">
+      <button type="button" data-t="light" aria-pressed="false" title="Light theme">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"/></svg>
+        <span>Light</span>
+      </button>
+      <button type="button" data-t="dark" aria-pressed="false" title="Dark theme">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+        <span>Dark</span>
+      </button>
+    </div>
+  </div>
+</nav>
+
+<header class="hero">
+  <canvas id="signal" aria-hidden="true"></canvas>
+  <div class="wrap">
+    <span class="eyebrow"><span class="pulse"></span>Dhaka, Bangladesh</span>
+    <h1>Md. Jubaer Khan</h1>
+    <div class="hero-top">
+      <div class="hero-intro">
+        <p class="role"><span class="nb">Senior Software Engineer</span><span class="sep">/</span><wbr><span class="nb">Embedded Systems &amp; C/C++</span></p>
+        <p class="lede">
+      I build embedded and desktop software for automotive and industrial systems at BJIT —
+      C and C++ on RTOS and Embedded Linux, CAN&nbsp;2.0B and SAE&nbsp;J1939, written to MISRA and BARR-C.
+      Right now I lead the firmware for a cashless credit gateway for cash-handling terminals, on Arm Cortex-M
+      with FreeRTOS, lwIP and Ethernet. Alongside that I apply AI agents across the software development life
+          cycle and publish research on deep learning for medical imaging.
+        </p>
+      </div>
+      <div class="avatar-wrap">
+        <img class="avatar" src="profile.jpg" width="320" height="320"
+             alt="Md. Jubaer Khan" loading="eager" decoding="async" fetchpriority="high">
+      </div>
+    </div>
+
+    <div class="links">
+      <a href="mailto:jubaer.adib@gmail.com">Email</a>
+      <a href="https://github.com/Jubaer-Khan" target="_blank" rel="noopener">GitHub</a>
+      <a href="https://www.linkedin.com/in/md-jubaer-khan-5816a5160/" target="_blank" rel="noopener">LinkedIn</a>
+      <a href="https://orcid.org/0000-0002-8916-230X" target="_blank" rel="noopener">ORCID</a>
+      <a href="cv.pdf" download="Md_Jubaer_Khan_CV.pdf">CV (PDF)</a>
+    </div>
+
+    <div class="stats reveal">
+      <div><div class="num" data-to="5" data-suffix="+">0</div><div class="lbl">Years in industry</div></div>
+      <div><div class="num" data-to="15">0</div><div class="lbl">Projects delivered</div></div>
+      <div><div class="num" data-to="1">0</div><div class="lbl">IEEE journal paper</div></div>
+    </div>
+  </div>
+</header>
+
+<section id="about">
+  <div class="wrap reveal">
+    <h2 class="sec-label">About</h2>
+    <p>
+      Embedded software is most of my working life: C and C++ on RTOS and Embedded Linux targets, built for
+      automotive and industrial clients at BJIT, where I have been since 2022 and now work as a Senior
+      Software Engineer.
+    </p>
+    <p>
+      Much of it comes down to communication — CAN 2.0B and SAE J1939 in particular — and to the less glamorous
+      side of safety-critical development: design review, MISRA compliance, and getting a Yocto image to behave
+      on real hardware. The work is not only embedded, though. Qt and .NET desktop applications take up a good
+      share of it, as does migrating an ageing VB6 system to a web-based C#/.NET one. Right now I lead the firmware
+      for a cashless credit gateway for cash-handling terminals, and I have been applying AI agents across the
+      software development life cycle.
+    </p>
+    <p>
+      My research interests began during my degree at North South University and have stayed since. I co-authored
+      <a href="https://doi.org/10.1109/TCE.2024.3446793" target="_blank" rel="noopener">XCR-Net</a>, a deep-learning
+      framework for detecting COVID-19 and pneumonia from chest X-rays, published in <i>IEEE Transactions on
+      Consumer Electronics</i>. Medical imaging and biomedical text extraction both still hold my attention.
+    </p>
+  </div>
+</section>
+
+<section id="experience">
+  <div class="wrap">
+    <h2 class="sec-label reveal">Experience</h2>
+
+    <div class="item reveal">
+      <div class="item-head"><h3>Senior Software Engineer</h3><span class="when">Jul 2025 — Present</span></div>
+      <p class="org">BJIT Ltd. · Dhaka, Bangladesh</p>
+      <ul class="bul">
+        <li>Technical leadership for embedded and PC application projects, owning system architecture and critical modules.</li>
+        <li>Leading firmware development on a cashless credit gateway for cash-handling terminals, with the project architect &mdash; from protocol analysis to a multi-vendor proof of concept.</li>
+        <li>Design and code reviews, enforcing MISRA-C, MISRA-C++ and BARR-C compliance across project teams.</li>
+        <li>Mentoring junior and mid-level engineers through design walkthroughs and best-practice sharing.</li>
+        <li>Requirement analysis, effort estimation and technical risk mitigation with product owners and stakeholders.</li>
+        <li>Resolving complex system-level defects in RTOS and Embedded Linux environments.</li>
+        <li>Building AI-agent tooling in Python for in-house R&amp;D: monitoring agents, an MCP server for incident data, and RAG-based knowledge-base research.</li>
+      </ul>
+    </div>
+
+    <div class="item reveal">
+      <div class="item-head"><h3>Software Engineer</h3><span class="when">Apr 2022 — Jun 2025</span></div>
+      <p class="org">BJIT Ltd. · Dhaka, Bangladesh</p>
+      <ul class="bul">
+        <li>Built embedded, desktop and web software for Japanese and international clients.</li>
+        <li>Developed communication-driven applications over CAN 2.0B, SAE J1939, UART, SPI and I2C.</li>
+        <li>Built custom Embedded Linux distributions with Yocto and Buildroot for target hardware.</li>
+        <li>Delivered cross-platform desktop applications in C++/Qt and PC applications on .NET.</li>
+        <li>Implemented service-oriented embedded architectures and produced requirement and design documentation.</li>
+        <li>Collaborated in Agile/Scrum teams to meet delivery deadlines and resolve design and coding issues.</li>
+      </ul>
+    </div>
+
+    <div class="item reveal">
+      <div class="item-head"><h3>Web Developer &amp; Designer <span style="font-weight:400">(part-time)</span></h3><span class="when">Nov 2021 — Feb 2022</span></div>
+      <p class="org">Independent client engagement</p>
+      <ul class="bul">
+        <li>Planned, built, deployed and maintained a client business website with WordPress and cPanel, including professional email setup.</li>
+      </ul>
+    </div>
+
+    <div class="item reveal">
+      <div class="item-head"><h3>Intern Software Engineer</h3><span class="when">Feb 2021 — Jun 2021</span></div>
+      <p class="org">North South University — Office of Information Technology</p>
+      <ul class="bul">
+        <li>Built an NLP-based student assistance chatbot in Python and Flask, deployed on university infrastructure.</li>
+        <li>Developed an RFID-based automated printing and access facility using C++, ESP32 and the RC522 reader over SPI.</li>
+        <li>Developed prototypes and ran feasibility studies on emerging technologies for academic and administrative systems.</li>
+      </ul>
+    </div>
+
+    <div class="item reveal">
+      <div class="item-head"><h3>Student Worker, IT Support</h3><span class="when">Aug 2018 — Jan 2021</span></div>
+      <p class="org">North South University — Office of Information Technology</p>
+      <ul class="bul">
+        <li>Technical support for faculty, officials and students; lab PC provisioning and print server administration.</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section id="work">
+  <div class="wrap">
+    <h2 class="sec-label reveal">Selected Work</h2>
+
+    <div class="filters reveal" role="group" aria-label="Filter projects by area">
+      <button class="chip" data-f="all" aria-pressed="true">All</button>
+      <button class="chip" data-f="embedded" aria-pressed="false">Embedded</button>
+      <button class="chip" data-f="automotive" aria-pressed="false">Automotive</button>
+      <button class="chip" data-f="desktop" aria-pressed="false">Desktop</button>
+      <button class="chip" data-f="web" aria-pressed="false">Web</button>
+      <button class="chip" data-f="ai" aria-pressed="false">AI</button>
+      <span class="count" id="count" aria-live="polite">15 projects</span>
+    </div>
+
+    <div class="grid" id="grid">
+
+      <article class="card reveal" data-cat="embedded">
+        <span class="tile-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="6" y="6" width="12" height="12" rx="1.5"/><path d="M9 2v4M15 2v4M9 18v4M15 18v4M2 9h4M2 15h4M18 9h4M18 15h4"/></svg></span>
+        <h3>Cashless Credit Gateway for Cash-Handling Terminals</h3>
+        <p>Embedded firmware for a bridge board integrating cash-handling terminal hardware with a merchant point-of-sale system, plus a desktop simulator used to validate PC integration.</p>
+        <div class="tags"><span class="tag">C</span><span class="tag">Arm Cortex-M</span><span class="tag">FreeRTOS</span><span class="tag">lwIP</span><span class="tag">RS-232</span><span class="tag">TCP/IP</span><span class="tag">Flutter</span></div>
+        <p class="team">Team lead</p>
+      </article>
+
+      <article class="card reveal" data-cat="ai">
+        <span class="tile-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="8" width="18" height="12" rx="2"/><path d="M12 8V4H8M2 14h2M20 14h2M15 13v2M9 13v2"/></svg></span>
+        <h3>AI Agent-Based Monitoring Software</h3>
+        <p>In-house R&amp;D on an agent-based infrastructure monitoring and incident-response platform, with human approval required for every action.</p>
+        <div class="tags"><span class="tag">Python</span><span class="tag">AI agents</span><span class="tag">LLM</span><span class="tag">MCP</span><span class="tag">OpenTelemetry</span><span class="tag">Grafana</span><span class="tag">Docker</span></div>
+        <p class="team">In-house R&amp;D, team of 4</p>
+      </article>
+
+      <article class="card reveal" data-cat="ai">
+        <span class="tile-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="8" width="18" height="12" rx="2"/><path d="M12 8V4H8M2 14h2M20 14h2M15 13v2M9 13v2"/></svg></span>
+        <h3>Agentic SDLC</h3>
+        <p>In-house R&amp;D evaluating agent memory and retrieval approaches for an automated software-development-lifecycle knowledge base.</p>
+        <div class="tags"><span class="tag">AI agents</span><span class="tag">RAG</span><span class="tag">Qdrant</span><span class="tag">Neo4j</span><span class="tag">ArangoDB</span><span class="tag">SDLC</span></div>
+        <p class="team">In-house R&amp;D</p>
+      </article>
+
+      <article class="card reveal" data-cat="web desktop">
+        <span class="tile-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c3 3.5 3 14 0 18-3-4-3-14.5 0-18z"/></svg></span>
+        <h3>Legacy Modernisation &mdash; VB6 to C#/.NET</h3>
+        <p>Migration of a legacy desktop management application to a modern web stack, using AI-assisted migration tooling.</p>
+        <div class="tags"><span class="tag">VB6</span><span class="tag">C#</span><span class="tag">.NET 8</span><span class="tag">Blazor Server</span><span class="tag">Radzen</span><span class="tag">PostgreSQL</span></div>
+        <p class="team">Team of 15</p>
+      </article>
+
+      <article class="card reveal" data-cat="embedded automotive">
+        <span class="tile-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="6" y="6" width="12" height="12" rx="1.5"/><path d="M9 2v4M15 2v4M9 18v4M15 18v4M2 9h4M2 15h4M18 9h4M18 15h4"/></svg></span>
+        <h3>Vehicle Controller Migration &mdash; Turret &amp; Boom Control</h3>
+        <p>Safety-critical controller application for automotive-grade vehicle systems, with an off-vehicle CAN simulator for testing.</p>
+        <div class="tags"><span class="tag">C</span><span class="tag">C++</span><span class="tag">CAN 2.0B</span><span class="tag">SAE J1939</span><span class="tag">NXP Power Architecture</span><span class="tag">CodeWarrior</span><span class="tag">PCAN</span></div>
+        <p class="team">Team of 5</p>
+      </article>
+
+      <article class="card reveal" data-cat="embedded">
+        <span class="tile-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="8" width="14" height="10" rx="2"/><path d="M12 4v4M9 13h.01M15 13h.01M3 12v3M21 12v3"/></svg></span>
+        <h3>Boston Dynamics Spot &mdash; Custom Sensor Feasibility PoC</h3>
+        <p>Feasibility study for adding and updating a custom sensor on a quadruped robot platform, including a mocked-SDK test harness.</p>
+        <div class="tags"><span class="tag">Python</span><span class="tag">Spot SDK</span><span class="tag">gRPC</span><span class="tag">Protocol Buffers</span></div>
+        <p class="team">In-house R&amp;D</p>
+      </article>
+
+      <article class="card reveal" data-cat="embedded">
+        <span class="tile-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="8" width="14" height="10" rx="2"/><path d="M12 4v4M9 13h.01M15 13h.01M3 12v3M21 12v3"/></svg></span>
+        <h3>Industrial Automation Robotic Arm PoC</h3>
+        <p>Proof of concept for industrial robotic-arm automation: a digital twin with forward and inverse kinematics, a pick-and-place demo and a multi-arm bus design.</p>
+        <div class="tags"><span class="tag">Unity (C#)</span><span class="tag">C/C++</span><span class="tag">Arduino</span><span class="tag">Inverse kinematics</span><span class="tag">CAN</span></div>
+        <p class="team">In-house R&amp;D</p>
+      </article>
+
+      <article class="card reveal" data-cat="embedded">
+        <span class="tile-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="6" y="6" width="12" height="12" rx="1.5"/><path d="M9 2v4M15 2v4M9 18v4M15 18v4M2 9h4M2 15h4M18 9h4M18 15h4"/></svg></span>
+        <h3>Custom Embedded Linux Distribution</h3>
+        <p>Custom Embedded Linux board support and image builds for an Arm single-board computer, covering toolchain, bootloader, device tree and BSP layer.</p>
+        <div class="tags"><span class="tag">Yocto</span><span class="tag">Buildroot</span><span class="tag">U-Boot</span><span class="tag">Device Tree</span><span class="tag">TI AM335x</span></div>
+        <p class="team">Team of 2</p>
+      </article>
+
+      <article class="card reveal" data-cat="embedded">
+        <span class="tile-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 20h16M6 16l9-9 3 3-9 9H6z"/></svg></span>
+        <h3>Bottle Recycling Machine &mdash; Concept &amp; Feasibility</h3>
+        <p>Concept and feasibility study for a reverse vending machine, covering detection, sorting, hardware design and costing.</p>
+        <div class="tags"><span class="tag">BeagleBone Black</span><span class="tag">Embedded Linux</span><span class="tag">Sensors</span><span class="tag">Motor control</span></div>
+        <p class="team">In-house R&amp;D</p>
+      </article>
+
+      <article class="card reveal" data-cat="desktop">
+        <span class="tile-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="4" width="18" height="12" rx="2"/><path d="M8 20h8M12 16v4"/></svg></span>
+        <h3>Cross-Platform Desktop Application (Qt)</h3>
+        <p>Cross-platform log-viewer application and reusable logging library with multithreaded loading, filtering and search.</p>
+        <div class="tags"><span class="tag">C++</span><span class="tag">Qt 6</span><span class="tag">CMake</span><span class="tag">GoogleTest</span></div>
+        <p class="team">Team of 2</p>
+      </article>
+
+      <article class="card reveal" data-cat="desktop">
+        <span class="tile-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="4" width="18" height="12" rx="2"/><path d="M8 20h8M12 16v4"/></svg></span>
+        <h3>PC &amp; Handheld Terminal Application Suite</h3>
+        <p>PC and handheld-terminal screens for a logistics data-capture system, built to client specification.</p>
+        <div class="tags"><span class="tag">RFgen</span><span class="tag">VBA</span><span class="tag">SQL</span><span class="tag">AWS CodeCommit</span></div>
+        <p class="team">Team of 3</p>
+      </article>
+
+      <article class="card reveal" data-cat="desktop">
+        <span class="tile-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="4" width="18" height="12" rx="2"/><path d="M8 20h8M12 16v4"/></svg></span>
+        <h3>Document Editor &amp; Viewer Feature Development</h3>
+        <p>Text-editing feature development for a large desktop document editor, including mixed-orientation multilingual text handling.</p>
+        <div class="tags"><span class="tag">C#</span><span class="tag">C++</span><span class="tag">Visual Studio</span></div>
+        <p class="team">Team of 21</p>
+      </article>
+
+      <article class="card reveal" data-cat="web">
+        <span class="tile-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c3 3.5 3 14 0 18-3-4-3-14.5 0-18z"/></svg></span>
+        <h3>Enterprise Asset Management Web Application</h3>
+        <p>Web-based asset management features with role-based access control, search and pagination, and bilingual localisation.</p>
+        <div class="tags"><span class="tag">ASP.NET MVC</span><span class="tag">C#</span><span class="tag">Razor</span><span class="tag">Entity Framework</span><span class="tag">jQuery</span></div>
+        <p class="team">Team of 6</p>
+      </article>
+
+      <article class="card reveal" data-cat="embedded automotive">
+        <span class="tile-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="6" y="6" width="12" height="12" rx="1.5"/><path d="M9 2v4M15 2v4M9 18v4M15 18v4M2 9h4M2 15h4M18 9h4M18 15h4"/></svg></span>
+        <h3>Legacy Vehicle Interface Module Firmware Migration</h3>
+        <p>Firmware migration of a legacy vehicle interface module to a modern rugged controller platform, with off-target test builds and hardware validation.</p>
+        <div class="tags"><span class="tag">C</span><span class="tag">C++</span><span class="tag">CAN 2.0B</span><span class="tag">SAE J1939</span><span class="tag">Nucleus RTOS</span><span class="tag">SCons/Conan</span><span class="tag">PCAN</span></div>
+        <p class="team">Team of 6</p>
+      </article>
+
+      <article class="card reveal" data-cat="embedded">
+        <span class="tile-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="6" y="6" width="12" height="12" rx="1.5"/><path d="M9 2v4M15 2v4M9 18v4M15 18v4M2 9h4M2 15h4M18 9h4M18 15h4"/></svg></span>
+        <h3>Automated Teller Machine Control System</h3>
+        <p>Requirement analysis and OOAD/UML design of an ATM control system, implemented as a terminal application.</p>
+        <div class="tags"><span class="tag">C++</span><span class="tag">OOAD/UML</span><span class="tag">Makefile</span></div>
+        <p class="team">Team of 5</p>
+      </article>
+
+    </div>
+    <p class="venue reveal" style="margin-top:18px">Client and product names are withheld under confidentiality agreements.</p>
+  </div>
+</section>
+
+<section id="opensource">
+  <div class="wrap">
+    <h2 class="sec-label reveal">Academic Projects</h2>
+    <div class="grid">
+
+      <article class="card repo reveal">
+        <div class="repo-top">
+          <span class="tile-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/></svg></span>
+          <span class="lang"><span class="dot-lang"></span>Python</span>
+        </div>
+        <h3><a href="https://github.com/Jubaer-Khan/Retinal-Image-Segmentation-using-CNN" target="_blank" rel="noopener">Retinal Image Segmentation using CNN</a></h3>
+        <p>CNN architectures that segment retinal blood vessels for disease detection, with normalisation, CLAHE and gamma-adjustment pre-processing to lift accuracy.</p>
+        <div class="repo-foot tags"><span class="tag">TensorFlow</span><span class="tag">Keras</span><span class="tag">CNN</span></div>
+      </article>
+
+      <article class="card repo reveal">
+        <div class="repo-top">
+          <span class="tile-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="2" width="14" height="20" rx="2"/><path d="M12 18h.01"/></svg></span>
+          <span class="lang"><span class="dot-lang"></span>HTML</span>
+        </div>
+        <h3><a href="https://github.com/Jubaer-Khan/MenuWhiz--NFC-based-Restaurant-order-application" target="_blank" rel="noopener">MenuWhiz — NFC Restaurant Ordering</a></h3>
+        <p>NFC-driven ordering platform combining an Android customer app, a restaurant web portal and a shared menu/order database.</p>
+        <div class="repo-foot tags"><span class="tag">Android</span><span class="tag">NFC</span><span class="tag">Django</span><span class="tag">SQL</span></div>
+      </article>
+
+      <article class="card repo reveal">
+        <div class="repo-top">
+          <span class="tile-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3a4 4 0 0 0-4 4v3a4 4 0 0 0 8 0V7a4 4 0 0 0-4-4z"/><path d="M5 11a7 7 0 0 0 14 0"/><path d="M12 18v3"/></svg></span>
+          <span class="lang"><span class="dot-lang"></span>Python</span>
+        </div>
+        <h3>Lung Disease Detection from X-Ray Images</h3>
+        <p>A CNN-based classifier for lung disease detection from chest X-rays, covering investigation, analysis and basic design.</p>
+        <div class="repo-foot tags"><span class="tag">Python</span><span class="tag">CNN</span><span class="tag">Image processing</span></div>
+      </article>
+
+      <article class="card repo reveal">
+        <div class="repo-top">
+          <span class="tile-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="8" width="16" height="10" rx="2"/><path d="M8 18v2M16 18v2M12 4v4"/><circle cx="12" cy="3" r="1"/></svg></span>
+          <span class="lang"><span class="dot-lang"></span>Embedded C</span>
+        </div>
+        <h3>Line Follower Robot for Office Assistance</h3>
+        <p>An autonomous line-following robot with IR and motion sensing and load balancing for in-office delivery tasks.</p>
+        <div class="repo-foot tags"><span class="tag">IR sensors</span><span class="tag">Embedded C</span><span class="tag">Autonomous driving</span></div>
+      </article>
+
+
+    </div>
+    <p class="venue reveal" style="margin-top:18px">
+      Titles link to a repository where the code is public — more at
+      <a href="https://github.com/Jubaer-Khan" target="_blank" rel="noopener">github.com/Jubaer-Khan</a>.
+      These are university projects; my professional work is covered above and is not public.
+    </p>
+  </div>
+</section>
+
+<section id="research">
+  <div class="wrap">
+    <h2 class="sec-label reveal">Research &amp; Publications</h2>
+
+    <div class="pub reveal">
+      <h3>XCR-Net: A Computer Aided Framework to Detect COVID-19</h3>
+      <p class="authors">Ashik Mostafa Alvi, <b>Md. Jubaer Khan</b>, Nishat Tasnim Manami, Zubair Azim Miazi, Kate Wang, Siuly Siuly, Hua Wang</p>
+      <p class="venue">IEEE Transactions on Consumer Electronics, vol. 70, no. 4, pp. 7551–7561, 2024 ·
+        <a href="https://doi.org/10.1109/TCE.2024.3446793" target="_blank" rel="noopener">doi.org/10.1109/TCE.2024.3446793</a></p>
+    </div>
+
+    <div class="pub reveal">
+      <h3>Building COVID Knowledge Base from Medical Journals</h3>
+      <p class="authors"><b>Md. Jubaer Khan</b>, Walidul Alam Ehab</p>
+      <p class="venue">Undergraduate thesis, Dept. of Electrical &amp; Computer Engineering, North South University, 2021 ·
+        <a href="https://repository.northsouth.edu/items/288c6413-a428-445e-8c41-83eba07064d2" target="_blank" rel="noopener">repository.northsouth.edu</a></p>
+    </div>
+  </div>
+</section>
+
+<section id="skills">
+  <div class="wrap">
+    <h2 class="sec-label reveal">Skills</h2>
+    <dl style="margin:0" class="reveal">
+      <div class="skill-row"><dt>Programming Languages</dt><dd>C, C++ (Embedded C/C++, Visual C++), Python, C#, VB.NET, Java, JavaScript</dd></div>
+      <div class="skill-row"><dt>Embedded &amp; RTOS</dt><dd>RTOS (FreeRTOS), lwIP TCP/IP stack, Embedded Linux (Yocto, Buildroot), STM32 ecosystem, ESP32/ESP8266, embedded system design, peripheral and sensor interfacing, schematic and datasheet analysis</dd></div>
+      <div class="skill-row"><dt>Protocols</dt><dd>CAN 2.0B, SAE J1939, RS-232, UART, SPI, I2C, TCP/IP, Ethernet, RFID, Wi-Fi</dd></div>
+      <div class="skill-row"><dt>Standards</dt><dd>MISRA-C, MISRA-C++, BARR-C, design patterns, UML, OOAD, test-driven development</dd></div>
+      <div class="skill-row"><dt>Desktop &amp; Web</dt><dd>Qt, Flutter/Dart, MFC, .NET Framework / .NET Core, ASP.NET MVC, Razor, Flask, Django, HTML, CSS, Bootstrap</dd></div>
+      <div class="skill-row"><dt>Databases</dt><dd>MySQL, MS SQL Server</dd></div>
+      <div class="skill-row"><dt>AI &amp; ML</dt><dd>AI agents and agentic workflows, LLM agent orchestration, human-in-the-loop approval workflows, RAG (vector + knowledge-graph retrieval), MCP servers, TensorFlow, Keras, CNNs, NLP, Word2vec</dd></div>
+      <div class="skill-row"><dt>Tools</dt><dd>Git, GitHub, Bitbucket, Jira, Confluence, Visual Studio, VS Code, PlatformIO, Arduino IDE, CodeWarrior, Orchestra Suite, OpenTelemetry, Grafana, Prometheus, Loki, Agile/Scrum</dd></div>
+      <div class="skill-row"><dt>Other</dt><dd>Unity, LaTeX, Figma</dd></div>
+      <div class="skill-row"><dt>Spoken Languages</dt><dd>Bangla — native · English — fluent</dd></div>
+    </dl>
+  </div>
+</section>
+
+<section id="education">
+  <div class="wrap">
+    <h2 class="sec-label reveal">Education</h2>
+
+    <div class="stack">
+    <article class="card tile tile-wide reveal">
+      <span class="tile-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M22 10 12 5 2 10l10 5 10-5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg></span>
+      <div class="tile-body">
+        <h3>B.Sc. in Computer Science &amp; Engineering</h3>
+        <p class="org">North South University, Dhaka</p>
+        <span class="pill">Graduated Cum Laude</span>
+      </div>
+      <span class="when">2017 — 2021</span>
+    </article>
+
+    <article class="card tile tile-wide reveal">
+      <span class="tile-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M22 10 12 5 2 10l10 5 10-5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg></span>
+      <div class="tile-body">
+        <h3>Higher Secondary Certificate (HSC), Science</h3>
+        <p class="org">Jhalokathi Govt. College, Jhalokathi</p>
+      </div>
+      <span class="when">2013 — 2015</span>
+    </article>
+    </div>
+  </div>
+</section>
+
+<section id="certifications">
+  <div class="wrap">
+    <h2 class="sec-label reveal">Certifications</h2>
+
+    <div class="grid">
+      <article class="card tile reveal">
+        <span class="tile-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3l1.9 5.8L20 11l-6.1 2.2L12 19l-1.9-5.8L4 11l6.1-2.2z"/></svg></span>
+        <h3>Artificial Intelligence Fundamentals</h3>
+        <p class="org">IBM SkillsBuild</p>
+        <span class="when">2026</span>
+      </article>
+      <article class="card tile reveal">
+        <span class="tile-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="m9 12 2 2 4-4"/></svg></span>
+        <h3>Information Security (IS-101)</h3>
+        <p class="org">BJIT Academy</p>
+        <span class="when">2024</span>
+      </article>
+      <article class="card tile reveal">
+        <span class="tile-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="5" width="14" height="14" rx="2"/><rect x="9" y="9" width="6" height="6"/><path d="M9 1v4M15 1v4M9 19v4M15 19v4M1 9h4M1 15h4M19 9h4M19 15h4"/></svg></span>
+        <h3>Fundamental Engineering Course in Embedded System</h3>
+        <p class="org">BJIT Academy</p>
+        <span class="when">2022</span>
+      </article>
+    </div>
+  </div>
+</section>
+
+<section id="awards">
+  <div class="wrap">
+    <h2 class="sec-label reveal">Awards</h2>
+
+    <div class="grid">
+      <article class="card tile reveal">
+        <span class="tile-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 21h8M12 17v4M7 4h10v5a5 5 0 0 1-10 0zM17 5h3v2a3 3 0 0 1-3 3M7 5H4v2a3 3 0 0 0 3 3"/></svg></span>
+        <h3>Best Performer of the Year</h3>
+        <p class="org">BJIT Ltd.</p>
+        <span class="when">2023 — 2024</span>
+        <p>Company-wide annual recognition, presented at the BJIT General Meeting 2023–2024.</p>
+      </article>
+    </div>
+  </div>
+</section>
+
+<section id="protocol">
+  <div class="wrap">
+    <h2 class="sec-label reveal">Protocol Corner</h2>
+
+    <div class="filters reveal" role="group" aria-label="Choose a protocol">
+      <button class="chip" data-p="can" aria-pressed="true">CAN 2.0B</button>
+      <button class="chip" data-p="tcp" aria-pressed="false">TCP</button>
+      <button class="chip" data-p="uart" aria-pressed="false">UART</button>
+      <button class="chip" data-p="spi" aria-pressed="false">SPI</button>
+      <button class="chip" data-p="i2c" aria-pressed="false">I²C</button>
+    </div>
+
+    <div class="canframe reveal" aria-label="Animated protocol frame diagram">
+      <div class="cf-head" id="cfHead"></div>
+      <div class="cf-track" id="cfTrack" aria-hidden="true"></div>
+      <p class="cf-cap" id="cfCap" aria-live="off"></p>
+    </div>
+
+    <p class="venue reveal" style="margin-top:14px">
+      Protocols from my work — CAN on the vehicle, TCP across the network, and UART, SPI and I²C on the board.
+      Hover a field to hold it; it cycles on its own otherwise.
+    </p>
+  </div>
+</section>
+
+<section id="contact">
+  <div class="wrap">
+    <h2 class="sec-label reveal">Contact</h2>
+
+    <div class="contact-wrap reveal">
+      <form id="contactForm" novalidate>
+        <div class="field">
+          <label for="cf-name">Your name</label>
+          <input id="cf-name" name="name" type="text" required autocomplete="name" placeholder="Jane Doe">
+        </div>
+        <div class="field">
+          <label for="cf-from">Your email</label>
+          <input id="cf-from" name="from" type="email" required autocomplete="email" placeholder="jane@example.com">
+        </div>
+        <div class="field">
+          <label for="cf-subject">Subject</label>
+          <input id="cf-subject" name="subject" type="text" required placeholder="Embedded firmware role">
+        </div>
+        <div class="field">
+          <label for="cf-message">Message</label>
+          <textarea id="cf-message" name="message" required placeholder="A few lines about what you have in mind."></textarea>
+        </div>
+        <button class="send" type="submit">Compose email</button>
+        <p class="send-note" id="cf-note">This opens your email app with the message ready to send.</p>
+      </form>
+
+      <aside class="contact-direct">
+        <h3>Or reach me directly</h3>
+        <p>No form, no middleman &mdash; these all reach me.</p>
+        <ul>
+          <li><span>Email</span><a href="mailto:jubaer.adib@gmail.com">jubaer.adib@gmail.com</a></li>
+          <li><span>LinkedIn</span><a href="https://www.linkedin.com/in/md-jubaer-khan-5816a5160/" target="_blank" rel="noopener">md-jubaer-khan</a></li>
+          <li><span>GitHub</span><a href="https://github.com/Jubaer-Khan" target="_blank" rel="noopener">Jubaer-Khan</a></li>
+          <li><span>ORCID</span><a href="https://orcid.org/0000-0002-8916-230X" target="_blank" rel="noopener">0000-0002-8916-230X</a></li>
+          <li><span>Based in</span><a href="#" onclick="return false" style="color:var(--muted)">Dhaka, Bangladesh</a></li>
+        </ul>
+      </aside>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <span>© <span id="yr">2026</span> Md. Jubaer Khan · Dhaka, Bangladesh</span>
+    <span class="f-links">
+      <a href="mailto:jubaer.adib@gmail.com">Email</a>
+      <a href="https://github.com/Jubaer-Khan" target="_blank" rel="noopener">GitHub</a>
+      <a href="https://www.linkedin.com/in/md-jubaer-khan-5816a5160/" target="_blank" rel="noopener">LinkedIn</a>
+      <a href="https://orcid.org/0000-0002-8916-230X" target="_blank" rel="noopener">ORCID</a>
+    </span>
+  </div>
+</footer>
+
+<script>
+(function () {
+  'use strict';
+  var reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var root = document.documentElement;
+
+  /* ---------- year ---------- */
+  document.getElementById('yr').textContent = new Date().getFullYear();
+
+  /* ---------- theme switch (saved choice is applied in <head>) ---------- */
+  var osDark = matchMedia('(prefers-color-scheme: dark)');
+  var themeBtns = [].slice.call(document.querySelectorAll('.theme-switch button'));
+
+  function currentTheme() {
+    return root.getAttribute('data-theme') || (osDark.matches ? 'dark' : 'light');
+  }
+  function syncSwitch() {
+    var cur = currentTheme();
+    themeBtns.forEach(function (b) { b.setAttribute('aria-pressed', String(b.dataset.t === cur)); });
+  }
+  function applyTheme(next) {
+    root.setAttribute('data-theme', next);
+    try { localStorage.setItem('theme', next); } catch (e) {}
+    syncSwitch();
+    if (window.__sig) window.__sig.recolor();
+  }
+
+  themeBtns.forEach(function (b) {
+    b.addEventListener('click', function () {
+      var next = b.dataset.t;
+      if (next === currentTheme()) return;
+      if (document.startViewTransition && !reduced && !document.hidden) {
+        var vt = document.startViewTransition(function () { applyTheme(next); });
+        /* a skipped transition still applies the theme; don't log it as an error */
+        vt.ready.catch(function () {});
+        vt.updateCallbackDone.catch(function () {});
+        vt.finished.catch(function () {});
+      } else {
+        applyTheme(next);
+      }
+    });
+  });
+  /* follow the OS setting until the visitor picks one */
+  if (osDark.addEventListener) osDark.addEventListener('change', function () {
+    syncSwitch();
+    if (window.__sig) window.__sig.recolor();
+  });
+  syncSwitch();
+
+  /* ---------- sticky nav border ---------- */
+  var nav = document.getElementById('nav');
+  var onScroll = function () { nav.classList.toggle('stuck', window.scrollY > 8); };
+  addEventListener('scroll', onScroll, { passive: true });
+  onScroll();
+
+  /* ---------- scroll-reveal fallback ---------- */
+  if (!CSS.supports('animation-timeline: view()') && !reduced) {
+    var io = new IntersectionObserver(function (entries) {
+      entries.forEach(function (en) {
+        if (en.isIntersecting) { en.target.classList.add('in'); io.unobserve(en.target); }
+      });
+    }, { rootMargin: '0px 0px -8% 0px', threshold: 0.08 });
+    document.querySelectorAll('.reveal').forEach(function (el) { io.observe(el); });
+  }
+
+  /* ---------- active nav link ---------- */
+  var links = [].slice.call(document.querySelectorAll('nav a.lnk'));
+  var sections = links.map(function (a) { return document.querySelector(a.getAttribute('href')); });
+  if ('IntersectionObserver' in window) {
+    var spy = new IntersectionObserver(function (entries) {
+      entries.forEach(function (en) {
+        if (!en.isIntersecting) return;
+        var i = sections.indexOf(en.target);
+        links.forEach(function (a, j) { a.classList.toggle('active', i === j); });
+      });
+    }, { rootMargin: '-45% 0px -50% 0px' });
+    sections.forEach(function (s) { if (s) spy.observe(s); });
+  }
+
+  /* ---------- stat count-up ---------- */
+  var nums = [].slice.call(document.querySelectorAll('.num'));
+  function runCount(el) {
+    var to = parseInt(el.dataset.to, 10),
+        sfx = el.dataset.suffix || '';
+    if (reduced) { el.textContent = to + sfx; return; }
+    var t0 = performance.now(), dur = 900;
+    (function step(now) {
+      var p = Math.min((now - t0) / dur, 1);
+      var eased = 1 - Math.pow(1 - p, 3);
+      el.textContent = Math.round(to * eased) + (p === 1 ? sfx : '');
+      if (p < 1) requestAnimationFrame(step);
+    })(t0);
+  }
+  if ('IntersectionObserver' in window) {
+    var cio = new IntersectionObserver(function (entries) {
+      entries.forEach(function (en) {
+        if (en.isIntersecting) { runCount(en.target); cio.unobserve(en.target); }
+      });
+    }, { threshold: 0.6 });
+    nums.forEach(function (n) { cio.observe(n); });
+  } else {
+    nums.forEach(runCount);
+  }
+
+  /* ---------- project filter ---------- */
+  var chips = [].slice.call(document.querySelectorAll('.chip[data-f]'));
+  var cards = [].slice.call(document.querySelectorAll('#grid .card'));
+  var countEl = document.getElementById('count');
+
+  function applyFilter(f) {
+    var shown = 0;
+    cards.forEach(function (c) {
+      var ok = f === 'all' || (' ' + c.dataset.cat + ' ').indexOf(' ' + f + ' ') > -1;
+      c.hidden = !ok;
+      if (ok) shown++;
+    });
+    countEl.textContent = shown + (shown === 1 ? ' project' : ' projects');
+    chips.forEach(function (ch) { ch.setAttribute('aria-pressed', String(ch.dataset.f === f)); });
+  }
+  chips.forEach(function (ch) {
+    ch.addEventListener('click', function () { applyFilter(ch.dataset.f); });
+  });
+
+  /* ---------- card spotlight ---------- */
+  if (matchMedia('(hover: hover)').matches) {
+    cards.forEach(function (c) {
+      c.addEventListener('pointermove', function (e) {
+        var r = c.getBoundingClientRect();
+        c.style.setProperty('--mx', (e.clientX - r.left) + 'px');
+        c.style.setProperty('--my', (e.clientY - r.top) + 'px');
+      });
+    });
+  }
+
+  /* ---------- protocol frame visualiser (CAN 2.0B / TCP) ---------- */
+  (function protoFrame() {
+    var track = document.getElementById('cfTrack'),
+        cap   = document.getElementById('cfCap'),
+        head  = document.getElementById('cfHead');
+    if (!track) return;
+
+    var FRAMES = {
+      can: {
+        head: 'CAN 2.0B — base data frame',
+        fields: [
+          { n: 'SOF',  b: '1b',  w: 2,  d: 'Start of frame — a single dominant bit that synchronises every node on the bus.' },
+          { n: 'ID',   b: '11b', w: 9,  d: 'Identifier. The lower the value the higher the priority, so it decides arbitration.' },
+          { n: 'RTR',  b: '1b',  w: 2,  d: 'Remote transmission request — separates a data frame from a request for data.' },
+          { n: 'IDE',  b: '1b',  w: 2,  d: 'Identifier extension — dominant for the 11-bit base format, recessive for 29-bit extended.' },
+          { n: 'r0',   b: '1b',  w: 2,  d: 'Reserved bit, held dominant.' },
+          { n: 'DLC',  b: '4b',  w: 4,  d: 'Data length code — how many payload bytes follow, 0 through 8.' },
+          { n: 'DATA', b: '64b', w: 16, d: 'Payload. Up to 8 bytes; under SAE J1939 this carries the signals packed by SPN.' },
+          { n: 'CRC',  b: '15b', w: 9,  d: '15-bit cyclic redundancy check over everything transmitted so far.' },
+          { n: 'ACK',  b: '2b',  w: 3,  d: 'Acknowledge slot — any node that received the frame cleanly drives this dominant.' },
+          { n: 'EOF',  b: '7b',  w: 6,  d: 'End of frame — seven recessive bits closing the transmission.' }
+        ]
+      },
+      tcp: {
+        head: 'TCP — segment header',
+        fields: [
+          { n: 'SRC PORT', b: '16b',  w: 7, d: 'Source port — identifies the sending application endpoint.' },
+          { n: 'DST PORT', b: '16b',  w: 7, d: 'Destination port — which service on the remote host receives this segment.' },
+          { n: 'SEQ',      b: '32b',  w: 9, d: 'Sequence number — byte offset of this segment within the stream; carries the ISN during the handshake.' },
+          { n: 'ACK NUM',  b: '32b',  w: 9, d: 'Acknowledgement number — the next byte expected, valid only when the ACK flag is set.' },
+          { n: 'OFF',      b: '4b',   w: 3, d: 'Data offset — header length in 32-bit words, so the receiver knows where the payload starts.' },
+          { n: 'RSVD',     b: '4b',   w: 3, d: 'Reserved bits, held zero.' },
+          { n: 'FLAGS',    b: '8b',   w: 5, d: 'Control flags — SYN, ACK, FIN, RST, PSH, URG and the ECN bits that drive the connection state machine.' },
+          { n: 'WINDOW',   b: '16b',  w: 7, d: 'Window size — how many more bytes the receiver can accept. The basis of flow control.' },
+          { n: 'CKSUM',    b: '16b',  w: 7, d: 'Checksum over the header, the payload and a pseudo-header borrowed from the IP layer.' },
+          { n: 'URG PTR',  b: '16b',  w: 7, d: 'Urgent pointer — offset to urgent data, meaningful only when URG is set.' },
+          { n: 'OPTIONS',  b: '0-320b', w: 9, d: 'Options — MSS, window scaling, SACK and timestamps, padded to a 32-bit boundary.' }
+        ]
+      },
+      uart: {
+        head: 'UART — 8N1 character frame',
+        fields: [
+          { n: 'IDLE',   b: 'high',  w: 4, d: 'Idle — the line sits high between characters, so a falling edge is unambiguous.' },
+          { n: 'START',  b: '1b',    w: 3, d: 'Start bit — one low bit that wakes the receiver and starts its baud clock. There is no shared clock line, so both ends must already agree on the rate.' },
+          { n: 'D0-D7',  b: '8b',    w: 14, d: 'Data bits — 5 to 9 of them, shifted out least significant bit first.' },
+          { n: 'PARITY', b: '0-1b',  w: 4, d: 'Optional parity bit — even, odd or none. The cheapest error check there is, and it only catches odd numbers of flipped bits.' },
+          { n: 'STOP',   b: '1-2b',  w: 4, d: 'Stop bit — the line returns high, framing the character and giving the receiver time to resynchronise.' }
+        ]
+      },
+      spi: {
+        head: 'SPI — four-wire synchronous bus',
+        fields: [
+          { n: 'SCLK', b: 'clock',     w: 5, d: 'Serial clock, driven by the controller. Every bit is shifted on one edge and sampled on the other, so there is no baud-rate agreement to get wrong.' },
+          { n: 'MOSI', b: 'out', w: 6, d: 'Controller out, peripheral in — the outbound data line.' },
+          { n: 'MISO', b: 'in', w: 6, d: 'Peripheral out, controller in — the return line. Both move at once, which makes SPI full duplex.' },
+          { n: 'CS',   b: 'enable', w: 5, d: 'Chip select — pulled low to address one peripheral. Every device needs its own line, which is what limits SPI fan-out.' },
+          { n: 'MODE', b: '0-3', w: 5, d: 'Clock polarity and phase give modes 0 through 3. Both ends must agree, and a mismatch is the classic reason a new SPI device reads back nothing but zeros.' }
+        ]
+      },
+      i2c: {
+        head: 'I²C — addressed byte transfer on two wires',
+        fields: [
+          { n: 'START',    b: 'cond', w: 4, d: 'Start condition — SDA pulled low while SCL is high. Both lines are open-drain and idle high, so the bus needs pull-up resistors to work at all.' },
+          { n: 'ADDRESS',  b: '7b',   w: 9, d: 'Address of the target device, clocked out most significant bit first. Seven bits means 112 usable addresses, which is why address clashes between modules are so common.' },
+          { n: 'R/W',      b: '1b',   w: 4, d: 'Read/write bit — low to write to the peripheral, high to read from it.' },
+          { n: 'ACK',      b: '1b',   w: 4, d: 'The addressed device pulls SDA low for one clock to confirm it exists. Silence here is how a bus scan finds nothing.' },
+          { n: 'DATA',     b: '8b',   w: 10, d: 'A data byte, most significant bit first. Any number of bytes may follow, each one acknowledged in turn.' },
+          { n: 'ACK/NACK', b: '1b',   w: 6, d: 'Acknowledge after every byte. A controller marks the final byte of a read with a NACK to tell the peripheral to stop sending.' },
+          { n: 'STOP',     b: 'cond', w: 4, d: 'Stop condition — SDA released high while SCL is high, freeing the bus for the next transfer.' }
+        ]
+      }
+    };
+
+    var cur = 'can', cells = [], i = 0, timer = null;
+
+    function build(key) {
+      cur = key; i = 0;
+      var f = FRAMES[key];
+      head.textContent = f.head;
+      track.innerHTML = '';
+      f.fields.forEach(function (fd, k) {
+        var el = document.createElement('div');
+        el.className = 'cf-field';
+        el.style.setProperty('--w', fd.w);
+        el.innerHTML = '<span>' + fd.n + '</span><span class="bits">' + fd.b + '</span>';
+        el.addEventListener('pointerenter', function () { stop(); show(k); i = (k + 1) % f.fields.length; });
+        track.appendChild(el);
+      });
+      cells = track.children;
+      show(0);
+      i = 1;
+    }
+
+    function show(k) {
+      var f = FRAMES[cur].fields;
+      for (var j = 0; j < cells.length; j++) cells[j].classList.toggle('on', j === k);
+      cap.innerHTML = '<b>' + f[k].n + '</b>&nbsp; ' + f[k].d;
+    }
+    function tick() { show(i); i = (i + 1) % FRAMES[cur].fields.length; }
+    function start() { if (!timer && !reduced) timer = setInterval(tick, 2300); }
+    function stop() { clearInterval(timer); timer = null; }
+
+    track.addEventListener('pointerleave', start);
+
+    [].forEach.call(document.querySelectorAll('.chip[data-p]'), function (ch) {
+      ch.addEventListener('click', function () {
+        [].forEach.call(document.querySelectorAll('.chip[data-p]'), function (c) {
+          c.setAttribute('aria-pressed', String(c === ch));
+        });
+        stop(); build(ch.dataset.p); start();
+      });
+    });
+
+    build('can');
+    if (reduced) return;
+
+    if ('IntersectionObserver' in window) {
+      new IntersectionObserver(function (entries) {
+        entries.forEach(function (en) { en.isIntersecting ? start() : stop(); });
+      }, { threshold: 0.25 }).observe(track);
+    } else { start(); }
+
+    document.addEventListener('visibilitychange', function () {
+      document.hidden ? stop() : start();
+    });
+  })();
+
+  /* ---------- hero portrait: diameter = role line .. end of lede ---------- */
+  (function sizeAvatar() {
+    var wrap = document.querySelector('.avatar-wrap'),
+        role = document.querySelector('.hero .role'),
+        lede = document.querySelector('.hero .lede');
+    if (!wrap || !role || !lede) return;
+
+    function fit() {
+      /* below 760px the portrait stacks above the text at a fixed size */
+      if (window.matchMedia('(width < 760px)').matches) {
+        wrap.style.removeProperty('width');
+        wrap.style.removeProperty('height');
+        return;
+      }
+      var d = Math.round(lede.getBoundingClientRect().bottom -
+                         role.getBoundingClientRect().top);
+      d = Math.max(190, Math.min(d, 330));
+      wrap.style.width = d + 'px';
+      wrap.style.height = d + 'px';
+    }
+
+    fit();
+    addEventListener('resize', fit, { passive: true });
+    if (window.ResizeObserver) new ResizeObserver(fit).observe(lede);
+    if (document.fonts && document.fonts.ready) document.fonts.ready.then(fit);
+  })();
+
+  /* ---------- contact form (mailto) ---------- */
+  (function contactForm() {
+    var form = document.getElementById('contactForm');
+    if (!form) return;
+    var note = document.getElementById('cf-note');
+    var ADDRESS = 'jubaer.adib@gmail.com';
+
+    form.addEventListener('submit', function (e) {
+      e.preventDefault();
+
+      if (!form.checkValidity()) {
+        form.reportValidity();
+        return;
+      }
+
+      var name = form.name.value.trim(),
+          from = form.from.value.trim(),
+          subject = form.subject.value.trim(),
+          message = form.message.value.trim();
+
+      var body = message + '\n\n\u2014\n' + name + '\n' + from;
+      var href = 'mailto:' + ADDRESS +
+                 '?subject=' + encodeURIComponent(subject) +
+                 '&body=' + encodeURIComponent(body);
+
+      /* mailto: silently does nothing when no mail client is registered,
+         so always leave the address and the text within reach. */
+      note.innerHTML = 'Opening your email app\u2026 nothing happened? ' +
+        'Email <a href="mailto:' + ADDRESS + '">' + ADDRESS + '</a> directly, ' +
+        '<a href="#" id="cf-copy">copy the message</a> first.';
+
+      var copy = document.getElementById('cf-copy');
+      if (copy) {
+        copy.addEventListener('click', function (ev) {
+          ev.preventDefault();
+          var text = 'Subject: ' + subject + '\n\n' + body;
+          if (navigator.clipboard && navigator.clipboard.writeText) {
+            navigator.clipboard.writeText(text).then(function () {
+              copy.textContent = 'copied';
+            }, function () {
+              copy.textContent = 'copy failed';
+            });
+          } else {
+            copy.textContent = 'copy unavailable';
+          }
+        });
+      }
+
+      window.location.href = href;
+    });
+  })();
+
+  /* ---------- hero signal canvas ---------- */
+  (function signal() {
+    var cv = document.getElementById('signal');
+    if (!cv || reduced) return;
+    var ctx = cv.getContext('2d');
+    var touch = matchMedia('(hover: none)').matches;
+    var w = 0, h = 0, dpr = Math.min(devicePixelRatio || 1, touch ? 1.5 : 2);
+    var stroke = '';
+
+    function recolor() {
+      stroke = getComputedStyle(root).getPropertyValue('--signal').trim();
+    }
+    var baseY = 0;
+    function size() {
+      var r = cv.getBoundingClientRect();
+      w = r.width; h = r.height;
+      cv.width = Math.round(w * dpr);
+      cv.height = Math.round(h * dpr);
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+
+      /* sit the trace in the gap between the link pills and the stat tiles */
+      var links = document.querySelector('.hero .links'),
+          stats = document.querySelector('.hero .stats');
+      if (links && stats) {
+        var lb = links.getBoundingClientRect().bottom - r.top,
+            st = stats.getBoundingClientRect().top - r.top;
+        baseY = lb + (st - lb) / 2 + 8;
+      } else {
+        baseY = h * 0.74;
+      }
+    }
+
+    /* deterministic pseudo-random bit stream */
+    var bits = [];
+    for (var i = 0; i < 400; i++) bits.push((Math.sin(i * 12.9898) * 43758.5453 % 1 + 1) % 1 > 0.5 ? 1 : 0);
+
+    var off = 0, raf = 0, visible = true, last = 0;
+    /* phones draw at ~30fps; the trace moves the same distance per second */
+    var frameMs = touch ? 28 : 0;
+    function loop(now) {
+      raf = requestAnimationFrame(loop);
+      if (now - last < frameMs) return;
+      var dt = last ? Math.min(now - last, 100) : 16.7;
+      last = now;
+      off += 0.65 * dt / 16.7;
+      draw();
+    }
+    function run() { if (!raf && visible && !document.hidden) { last = 0; raf = requestAnimationFrame(loop); } }
+    function halt() { cancelAnimationFrame(raf); raf = 0; }
+
+    function draw() {
+      ctx.clearRect(0, 0, w, h);
+
+      var bitW = 26, amp = 18;
+
+      /* oscilloscope graticule */
+      ctx.strokeStyle = stroke;
+      ctx.lineWidth = 1;
+      ctx.globalAlpha = 0.16;
+      ctx.beginPath();
+      for (var gx = (w % 52) / 2; gx <= w; gx += 52) { ctx.moveTo(gx, 0); ctx.lineTo(gx, h); }
+      for (var gy = baseY - 104; gy <= baseY + 104; gy += 26) { ctx.moveTo(0, gy); ctx.lineTo(w, gy); }
+      ctx.stroke();
+      ctx.globalAlpha = 1;
+
+      ctx.strokeStyle = stroke;
+      ctx.lineWidth = 1.4;
+      ctx.lineJoin = 'round';
+
+      /* square-wave bit stream */
+      ctx.beginPath();
+      var startIdx = Math.floor(off / bitW);
+      var x = -(off % bitW);
+      var prev = null;
+      for (var k = 0; x < w + bitW; k++, x += bitW) {
+        var b = bits[(startIdx + k) % bits.length];
+        var y = baseY - (b ? amp : 0);
+        if (prev === null) ctx.moveTo(x, y);
+        else { ctx.lineTo(x, prev); ctx.lineTo(x, y); }
+        ctx.lineTo(x + bitW, y);
+        prev = y;
+      }
+      ctx.stroke();
+
+      /* slow sine underlay */
+      ctx.globalAlpha = 0.45;
+      ctx.beginPath();
+      for (var px = 0; px <= w; px += 4) {
+        var sy = baseY + 56 + Math.sin((px + off * 0.6) * 0.012) * 13;
+        px === 0 ? ctx.moveTo(px, sy) : ctx.lineTo(px, sy);
+      }
+      ctx.stroke();
+      ctx.globalAlpha = 1;
+    }
+
+    recolor(); size(); draw(); run();
+    window.__sig = { recolor: function () { recolor(); draw(); } };
+
+    /* mobile address bar show/hide fires resize on scroll; only re-size on width changes */
+    var lastW = innerWidth;
+    addEventListener('resize', function () {
+      if (innerWidth === lastW) return;
+      lastW = innerWidth;
+      size(); draw();
+    }, { passive: true });
+
+    /* stop drawing once the hero is scrolled out of view */
+    if ('IntersectionObserver' in window) {
+      new IntersectionObserver(function (entries) {
+        visible = entries[0].isIntersecting;
+        visible ? run() : halt();
+      }).observe(cv);
+    }
+    document.addEventListener('visibilitychange', function () {
+      document.hidden ? halt() : run();
+    });
+  })();
+})();
+</script>
+
+</body>
+</html>
